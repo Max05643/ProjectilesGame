@@ -36,6 +36,7 @@ namespace Projectiles.UI
             xAxisSlider.onValueChanged.AddListener(OnXAxisSliderChanged);
             yAxisSlider.onValueChanged.AddListener(OnYAxisSliderChanged);
 
+
             Repaint();
         }
 
@@ -45,6 +46,14 @@ namespace Projectiles.UI
             horizontalProjectileAngleSlider.gameObject.SetActive(playerController.IsAttackPrepared);
             verticalProjectileAngleSlider.gameObject.SetActive(playerController.IsAttackPrepared);
             attackPrepareToggle.SetIsOnWithoutNotify(playerController.IsAttackPrepared);
+
+            if (playerController.IsAttackPrepared)
+            {
+                horizontalProjectileAngleSlider.normalizedValue = 0.5f;
+                verticalProjectileAngleSlider.normalizedValue = 0.5f;
+                OnVerticalProjectileAngleSliderChanged(0.5f);
+                OnHorizontalProjectileAngleSliderChanged(0.5f);
+            }
         }
 
         void OnAttackPrepareToggleChanged(bool isOn)

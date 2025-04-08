@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Projectiles.Effects;
 using Projectiles.Interfaces;
 using UnityEngine;
 
@@ -18,9 +19,10 @@ namespace Projectiles.Characters
         GameCharacterController gameCharacterController;
 
         [SerializeField]
-        float timeToDisappear = 5f;
+        DissolveEffect dissolveEffect;
 
-        float? timeOfDeath = null;
+        [SerializeField]
+        float timeToDisappear = 5f;
 
         void IDamageAble.ApplyDamage(int damage)
         {
@@ -35,15 +37,11 @@ namespace Projectiles.Characters
         {
             gameCharacterController.ChangeDeathState(true);
             gameCharacterController.SetMovement(Vector2.zero);
-            timeOfDeath = Time.timeSinceLevelLoad;
-        }
-
-        void Update()
-        {
-            if (timeOfDeath != null && Time.timeSinceLevelLoad - timeOfDeath > timeToDisappear)
+            dissolveEffect.ChangeEffectGradually(1f, timeToDisappear, () =>
             {
                 Destroy(gameObject);
-            }
+            });
         }
+
     }
 }
