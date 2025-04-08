@@ -37,6 +37,9 @@ namespace Projectiles.Characters
         [Range(0, 30)]
         float verticalProjectileAngle = 0;
 
+        [SerializeField]
+        Transform projectileSpawnPoint; // The point where the projectile is spawned
+
 
         [ContextMenu("Throw projectile")]
         public void ThrowProjectile()
