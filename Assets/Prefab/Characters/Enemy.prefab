@@ -289,7 +289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
       propertyPath: m_Name
-      value: Enemy Variant
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
       propertyPath: m_Layer
@@ -1801,6 +1801,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  gameCharacterController: {fileID: 8490774336200715853}
+  timeToDisappear: 5
 --- !u!4 &2720013016639888134 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4994864222783348, guid: dbf7a0c9d76b77a40af3104feac0641d,

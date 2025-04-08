@@ -32,8 +32,6 @@ namespace Projectiles.Projectiles
 
         void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("Projectile collided with: " + collision.gameObject.name);
-
             gameObject.layer = LayerMask.NameToLayer("CollidedProjectile");
 
 

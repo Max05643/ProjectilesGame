@@ -14,6 +14,13 @@ namespace Projectiles.Characters
         [SerializeField]
         int health = 100;
 
+        [SerializeField]
+        GameCharacterController gameCharacterController;
+
+        [SerializeField]
+        float timeToDisappear = 5f;
+
+        float? timeOfDeath = null;
 
         void IDamageAble.ApplyDamage(int damage)
         {
@@ -26,8 +33,17 @@ namespace Projectiles.Characters
 
         void Die()
         {
-            Debug.Log("Enemy died!");
-            Destroy(gameObject);
+            gameCharacterController.ChangeDeathState(true);
+            gameCharacterController.SetMovement(Vector2.zero);
+            timeOfDeath = Time.timeSinceLevelLoad;
+        }
+
+        void Update()
+        {
+            if (timeOfDeath != null && Time.timeSinceLevelLoad - timeOfDeath > timeToDisappear)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }
