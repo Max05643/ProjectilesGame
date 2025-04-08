@@ -241,12 +241,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!1 &746015331 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6738809931309837038, guid: ae351d3a31e6fdf448424eaf8f46732d,
-    type: 3}
-  m_PrefabInstance: {fileID: 1498712826959262314}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &873658446
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,14 +498,14 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 947029750294469224, guid: ae351d3a31e6fdf448424eaf8f46732d,
         type: 3}
+      propertyPath: movementSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 947029750294469224, guid: ae351d3a31e6fdf448424eaf8f46732d,
+        type: 3}
       propertyPath: projectilesCreator
       value: 
       objectReference: {fileID: 1536825741}
-    - target: {fileID: 947029750294469224, guid: ae351d3a31e6fdf448424eaf8f46732d,
-        type: 3}
-      propertyPath: projectileAnimationObject
-      value: 
-      objectReference: {fileID: 746015331}
     - target: {fileID: 6738809931309837038, guid: ae351d3a31e6fdf448424eaf8f46732d,
         type: 3}
       propertyPath: m_Layer

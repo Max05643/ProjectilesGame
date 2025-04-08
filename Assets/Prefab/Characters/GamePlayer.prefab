@@ -125,6 +125,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3868645451470297770}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6738809931309837038 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7508977666604249156, guid: f5b1c5de376a0b049a1cdf7b69e3356b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3868645451470297770}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7927889519414955218
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1805,6 +1811,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7594293137729366574}
+    - targetCorrespondingSourceObject: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 717943218282453792}
   m_SourcePrefab: {fileID: 100100000, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
 --- !u!1 &7927309506669639528 stripped
 GameObject:
@@ -1825,15 +1835,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 8021433461682431334}
-  xAxis: 0
-  yAxis: 0
-  isDead: 0
-  attackPrepare: 0
-  projectileAnimationObject: {fileID: 0}
+  rb: {fileID: 7594293137729366574}
+  projectileAnimationObject: {fileID: 6738809931309837038}
   projectilesCreator: {fileID: 0}
-  horizontalProjectileAngle: 0
-  verticalProjectileAngle: 0
   projectileSpawnPoint: {fileID: 4252091018947209923}
+  movementSpeed: 5
 --- !u!54 &7594293137729366574
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1857,10 +1863,29 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!114 &717943218282453792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7927309506669639528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b20feb9dc7155e44c8e4307c357428ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameCharacterController: {fileID: 947029750294469224}
+  horizontalProjectileAngle: 0
+  verticalProjectileAngle: 0
+  xAxis: 0
+  yAxis: 0
+  isDead: 0
+  attackPrepare: 0
 --- !u!4 &7929689150527294372 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4063552230360950, guid: dbf7a0c9d76b77a40af3104feac0641d,

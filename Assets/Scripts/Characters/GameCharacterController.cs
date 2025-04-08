@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Projectiles.Physics;
 using UnityEngine;
 
@@ -14,14 +15,7 @@ namespace Projectiles.Characters
         Animator animator;
 
         [SerializeField]
-        [Range(-1, 1)]
-        float xAxis, yAxis;
-
-        [SerializeField]
-        bool isDead;
-
-        [SerializeField]
-        bool attackPrepare;
+        Rigidbody rb;
 
         [SerializeField]
         GameObject projectileAnimationObject;
@@ -30,36 +24,74 @@ namespace Projectiles.Characters
         ProjectilesCreator projectilesCreator;
 
         [SerializeField]
-        [Range(-30, 30)]
-        float horizontalProjectileAngle = 0;
-
-        [SerializeField]
-        [Range(0, 30)]
-        float verticalProjectileAngle = 0;
-
-        [SerializeField]
         Transform projectileSpawnPoint; // The point where the projectile is spawned
 
+        [SerializeField]
+        float movementSpeed = 5f;
 
-        [ContextMenu("Throw projectile")]
-        public void ThrowProjectile()
+        Vector2 lastMovementDirection = Vector2.zero;
+
+        float lastHorizontalProjectileAngle = 0f;
+        float lastVerticalProjectileAngle = 0f;
+
+
+        /// <summary>
+        /// Plays the projectile throwing animation. Should be called only if attackPrepare is set
+        /// </summary>
+        public void ThrowProjectile(float horizontalProjectileAngle, float verticalProjectileAngle)
         {
-            if (!attackPrepare)
+            if (animator.GetBool("IsDead"))
+            {
+                Debug.LogError("Character is dead!");
+            }
+            else if (!animator.GetBool("AttackPrepare"))
             {
                 Debug.LogError("Attack not prepared!");
             }
             else
             {
                 animator.SetTrigger("AttackDo");
+                lastHorizontalProjectileAngle = horizontalProjectileAngle;
+                lastVerticalProjectileAngle = verticalProjectileAngle;
             }
+        }
+
+        /// <summary>
+        /// Changes character's death status
+        /// </summary>
+        public void ChangeDeathState(bool isDead)
+        {
+            animator.SetBool("IsDead", isDead);
+        }
+
+        /// <summary>
+        /// Changes character's attack preparation status
+        /// </summary>
+        public void ChangeAttackPrepareState(bool attackPrepare)
+        {
+            animator.SetBool("AttackPrepare", attackPrepare);
+        }
+
+        /// <summary>
+        /// Sets the character's movement direction
+        /// </summary>
+        public void SetMovement(Vector2 direction)
+        {
+            lastMovementDirection = direction.normalized;
         }
 
         void Update()
         {
-            animator.SetFloat("DirectionXAxis", xAxis);
-            animator.SetFloat("DirectionYAxis", yAxis);
-            animator.SetBool("IsDead", isDead);
-            animator.SetBool("AttackPrepare", attackPrepare);
+            if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Movement"))
+            {
+                animator.SetFloat("DirectionXAxis", lastMovementDirection.x);
+                animator.SetFloat("DirectionYAxis", lastMovementDirection.y);
+                rb.velocity = new Vector3(lastMovementDirection.x, 0, lastMovementDirection.y) * movementSpeed;
+            }
+            else
+            {
+                rb.velocity = Vector3.zero;
+            }
         }
 
         /// <summary>
@@ -67,7 +99,7 @@ namespace Projectiles.Characters
         /// </summary>
         public void ProjectileThrown()
         {
-            projectilesCreator.FirePlayersProjectile(projectileAnimationObject.transform, transform.forward, horizontalProjectileAngle, verticalProjectileAngle);
+            projectilesCreator.FirePlayersProjectile(projectileAnimationObject.transform, transform.forward, lastHorizontalProjectileAngle, lastVerticalProjectileAngle);
             projectileAnimationObject.SetActive(false);
         }
 
