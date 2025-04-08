@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,29 +15,59 @@ namespace Projectiles.Characters
         GameCharacterController gameCharacterController;
 
         [SerializeField]
-        [Range(-30, 30)]
-        float horizontalProjectileAngle = 0;
+        float minHorizontalAngle = -30f, maxHorizontalAngle = 30f;
 
         [SerializeField]
-        [Range(0, 30)]
+        float minVerticalAngle = 0f, maxVerticalAngle = 30f;
+
+        bool attackPrepared = false;
+        float xAxis = 0f;
+        float yAxis = 0f;
+        float horizontalProjectileAngle = 0;
         float verticalProjectileAngle = 0;
 
-        [SerializeField]
-        [Range(-1, 1)]
-        float xAxis, yAxis;
 
-        [SerializeField]
-        bool isDead;
+        public bool IsAttackPrepared => attackPrepared;
 
-        [SerializeField]
-        bool attackPrepare;
-
-        [ContextMenu("Test Attack")]
-        void TestAttack()
+        public void StartPreparingAttack()
         {
-            gameCharacterController.ThrowProjectile(horizontalProjectileAngle, verticalProjectileAngle);
+            attackPrepared = true;
+            gameCharacterController.ChangeAttackPrepareState(attackPrepared);
         }
 
+        public void StopPreparingAttack()
+        {
+            attackPrepared = false;
+            gameCharacterController.ChangeAttackPrepareState(attackPrepared);
+        }
+
+        public void SetXAxisNormalized(float value)
+        {
+            xAxis = Mathf.Lerp(-1f, 1f, value);
+        }
+
+        public void SetYAxisNormalized(float value)
+        {
+            yAxis = Mathf.Lerp(-1f, 1f, value);
+        }
+
+        public void SetNormalizedHorizontalProjectileAngle(float value)
+        {
+            horizontalProjectileAngle = Mathf.Lerp(minHorizontalAngle, maxHorizontalAngle, value);
+        }
+
+        public void SetNormalizedVerticalProjectileAngle(float value)
+        {
+            verticalProjectileAngle = Mathf.Lerp(minVerticalAngle, maxVerticalAngle, value);
+        }
+
+        public void Fire()
+        {
+            if (attackPrepared)
+            {
+                gameCharacterController.ThrowProjectile(horizontalProjectileAngle, verticalProjectileAngle);
+            }
+        }
 
         void Update()
         {
@@ -48,8 +79,8 @@ namespace Projectiles.Characters
             }
 
             gameCharacterController.SetMovement(movementVector);
-            gameCharacterController.ChangeAttackPrepareState(attackPrepare);
-            gameCharacterController.ChangeDeathState(isDead);
+
+            //gameCharacterController.ChangeDeathState(isDead);
         }
     }
 }
