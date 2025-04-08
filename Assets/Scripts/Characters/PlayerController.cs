@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Projectiles.Settings;
+using Projectiles.UI;
+using Projectiles.Utils;
 using UnityEngine;
 
 
@@ -13,6 +16,9 @@ namespace Projectiles.Characters
     {
         [SerializeField]
         GameCharacterController gameCharacterController;
+
+        [SerializeField]
+        TrajectoryDisplayer trajectoryDisplayer;
 
         [SerializeField]
         float minHorizontalAngle = -30f, maxHorizontalAngle = 30f;
@@ -80,7 +86,25 @@ namespace Projectiles.Characters
 
             gameCharacterController.SetMovement(movementVector);
 
-            //gameCharacterController.ChangeDeathState(isDead);
+            // If we are in an attack state, we show the projectile trajectory
+            if (attackPrepared)
+            {
+                trajectoryDisplayer.Show(
+                    BallisticCalculator.CalculateProjectileTrajectory(
+                        gameCharacterController.ProjectileSpawnPoint.position,
+                        gameCharacterController.transform.forward,
+                        horizontalProjectileAngle,
+                        verticalProjectileAngle,
+                        true,
+                        false,
+                        ProjectileSettings.initialSpeed
+                    )
+                );
+            }
+            else
+            {
+                trajectoryDisplayer.Hide();
+            }
         }
     }
 }

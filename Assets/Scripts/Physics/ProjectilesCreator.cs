@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Projectiles.Settings;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -10,9 +11,6 @@ namespace Projectiles.Physics
     {
         [SerializeField]
         GameObject projectilePrefabPlayer, projectilePrefabEnemy;
-
-        [SerializeField]
-        float initialSpeed = 50f, rotationSpeed = 100f;
 
         /// <summary>
         /// Creates a projectile object which belongs to player and sets its direction and speed
@@ -44,8 +42,7 @@ namespace Projectiles.Physics
             var rotation = Quaternion.Euler(-verticalProjectileAngle, horizontalProjectileAngle, 0);
             basicForwardDirection = rotation * (basicForwardDirection.normalized);
 
-            rb.velocity = basicForwardDirection * initialSpeed; // Initial velocity
-            rb.angularVelocity = Random.insideUnitSphere * rotationSpeed; // Random rotation
+            rb.velocity = basicForwardDirection * ProjectileSettings.initialSpeed; // Initial velocity
         }
     }
 }

@@ -35,6 +35,8 @@ namespace Projectiles.Characters
         float lastVerticalProjectileAngle = 0f;
 
 
+        public Transform ProjectileSpawnPoint => projectileSpawnPoint;
+
         /// <summary>
         /// Plays the projectile throwing animation. Should be called only if attackPrepare is set
         /// </summary>

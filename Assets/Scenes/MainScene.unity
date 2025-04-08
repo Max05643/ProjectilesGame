@@ -497,6 +497,52 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &514048680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 514048681}
+  - component: {fileID: 514048682}
+  m_Layer: 0
+  m_Name: TrajectoryDisplayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &514048681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514048680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &514048682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514048680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f99a2def0caeda4a87b02da21045603, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointPrefab: {fileID: 7934470397766284724, guid: e41f8a81eae476947bfba33e8e7523cb,
+    type: 3}
 --- !u!1 &524155105
 GameObject:
   m_ObjectHideFlags: 0
@@ -2543,8 +2589,6 @@ MonoBehaviour:
   projectilePrefabPlayer: {fileID: 5972417817578458676, guid: df2169f18f2c88e47875cbe8931a028d,
     type: 3}
   projectilePrefabEnemy: {fileID: 0}
-  initialSpeed: 30
-  rotationSpeed: 0
 --- !u!1 &1633750128
 GameObject:
   m_ObjectHideFlags: 0
@@ -2994,6 +3038,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 717943218282453792, guid: ae351d3a31e6fdf448424eaf8f46732d,
+        type: 3}
+      propertyPath: trajectoryDisplayer
+      value: 
+      objectReference: {fileID: 514048682}
     - target: {fileID: 947029750294469224, guid: ae351d3a31e6fdf448424eaf8f46732d,
         type: 3}
       propertyPath: movementSpeed
@@ -3425,6 +3474,7 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 249921720}
   - {fileID: 1536825740}
+  - {fileID: 514048681}
   - {fileID: 1498712826959262314}
   - {fileID: 55573049}
   - {fileID: 873658450}
