@@ -46,6 +46,7 @@ namespace Projectiles.Physics
             basicForwardDirection = Vector3.RotateTowards(basicForwardDirection, Vector3.up, verticalProjectileAngle * Mathf.Deg2Rad, 0.0f);
 
             rb.velocity = basicForwardDirection * ProjectileSettings.initialSpeed; // Initial velocity
+            rb.angularVelocity = Random.insideUnitSphere * ProjectileSettings.angularSpeed; // Random angular velocity
         }
     }
 }

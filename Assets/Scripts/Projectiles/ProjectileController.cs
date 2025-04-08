@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Projectiles.Interfaces;
+using Projectiles.Settings;
 using UnityEngine;
 
 namespace Projectiles.Projectiles
@@ -19,6 +20,9 @@ namespace Projectiles.Projectiles
         [SerializeField]
         float lifeTimeAfterGroundCollision = 5f;
 
+        [SerializeField]
+        Rigidbody rg;
+
         float? timeOfCollision = null; // The time of collision with the ground
 
 
@@ -34,6 +38,10 @@ namespace Projectiles.Projectiles
         {
             gameObject.layer = LayerMask.NameToLayer("CollidedProjectile");
 
+            if (ProjectileSettings.forceStopAfterFirstCollision)
+            {
+                rg.velocity = Vector3.zero; // Stop the projectile on collision
+            }
 
             if (timeOfCollision.HasValue)
             {

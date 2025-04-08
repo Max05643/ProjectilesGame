@@ -10,6 +10,8 @@ namespace Projectiles.Settings
     /// </summary>
     public static class ProjectileSettings
     {
-        public static float initialSpeed = 30f;
+        public static float initialSpeed = 20f;
+        public static float angularSpeed = 30f;
+        public static bool forceStopAfterFirstCollision = true; // If true, the projectile will stop after the first collision with the ground or an object
     }
 }
