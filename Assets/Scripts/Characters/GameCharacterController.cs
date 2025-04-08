@@ -88,7 +88,8 @@ namespace Projectiles.Characters
             {
                 animator.SetFloat("DirectionXAxis", lastMovementDirection.x);
                 animator.SetFloat("DirectionYAxis", lastMovementDirection.y);
-                rb.velocity = new Vector3(lastMovementDirection.x, 0, lastMovementDirection.y) * movementSpeed;
+                var targetVelocityObjectSpace = new Vector3(lastMovementDirection.x, 0, lastMovementDirection.y) * movementSpeed;
+                rb.velocity = transform.TransformDirection(targetVelocityObjectSpace);
             }
             else
             {

@@ -39,8 +39,11 @@ namespace Projectiles.Physics
 
             Assert.IsNotNull(rb, "Rigidbody component is missing on the projectile prefab");
 
-            var rotation = Quaternion.Euler(-verticalProjectileAngle, horizontalProjectileAngle, 0);
-            basicForwardDirection = rotation * (basicForwardDirection.normalized);
+
+
+            var horizontalRotation = Quaternion.Euler(0, horizontalProjectileAngle, 0);
+            basicForwardDirection = horizontalRotation * (basicForwardDirection.normalized);
+            basicForwardDirection = Vector3.RotateTowards(basicForwardDirection, Vector3.up, verticalProjectileAngle * Mathf.Deg2Rad, 0.0f);
 
             rb.velocity = basicForwardDirection * ProjectileSettings.initialSpeed; // Initial velocity
         }

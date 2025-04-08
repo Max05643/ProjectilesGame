@@ -52,8 +52,9 @@ namespace Projectiles.Utils
             const float timeStep = 0.1f;
             const float maxSimulationTime = 10f;
 
-            var rotation = Quaternion.Euler(-verticalProjectileAngle, horizontalProjectileAngle, 0);
-            basicForwardDirection = rotation * (basicForwardDirection.normalized);
+            var horizontalRotation = Quaternion.Euler(0, horizontalProjectileAngle, 0);
+            basicForwardDirection = horizontalRotation * (basicForwardDirection.normalized);
+            basicForwardDirection = Vector3.RotateTowards(basicForwardDirection, Vector3.up, verticalProjectileAngle * Mathf.Deg2Rad, 0.0f);
 
             var initialVelocity = basicForwardDirection * initialSpeed;
 
