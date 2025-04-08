@@ -29,6 +29,14 @@ namespace Projectiles.Characters
         [SerializeField]
         ProjectilesCreator projectilesCreator;
 
+        [SerializeField]
+        [Range(-30, 30)]
+        float horizontalProjectileAngle = 0;
+
+        [SerializeField]
+        [Range(0, 30)]
+        float verticalProjectileAngle = 0;
+
 
         [ContextMenu("Throw projectile")]
         public void ThrowProjectile()
@@ -56,7 +64,7 @@ namespace Projectiles.Characters
         /// </summary>
         public void ProjectileThrown()
         {
-            projectilesCreator.FirePlayersProjectile(projectileAnimationObject.transform, transform.forward);
+            projectilesCreator.FirePlayersProjectile(projectileAnimationObject.transform, transform.forward, horizontalProjectileAngle, verticalProjectileAngle);
             projectileAnimationObject.SetActive(false);
         }
 

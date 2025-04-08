@@ -17,31 +17,34 @@ namespace Projectiles.Physics
         /// <summary>
         /// Creates a projectile object which belongs to player and sets its direction and speed
         /// </summary>
-        public void FirePlayersProjectile(Transform original, Vector3 direction)
+        public void FirePlayersProjectile(Transform original, Vector3 basicForwardDirection, float horizontalProjectileAngle, float verticalProjectileAngle)
         {
-            FireProjectile(projectilePrefabPlayer, original, direction);
+            FireProjectile(projectilePrefabPlayer, original, basicForwardDirection, horizontalProjectileAngle, verticalProjectileAngle);
         }
 
         /// <summary>
         /// Creates a projectile object which belongs to enemy and sets its direction and speed
         /// </summary>
-        public void FireEnemiesProjectile(Transform original, Vector3 direction)
+        public void FireEnemiesProjectile(Transform original, Vector3 basicForwardDirection, float horizontalProjectileAngle, float verticalProjectileAngle)
         {
-            FireProjectile(projectilePrefabEnemy, original, direction);
+            FireProjectile(projectilePrefabEnemy, original, basicForwardDirection, horizontalProjectileAngle, verticalProjectileAngle);
         }
 
         /// <summary>
         /// Spawns a new projectile object and sets its direction and speed
         /// </summary>
         /// <param name="original">The transform of original object used in order to sync position and orientation</param>
-        void FireProjectile(GameObject prefab, Transform original, Vector3 direction)
+        void FireProjectile(GameObject prefab, Transform original, Vector3 basicForwardDirection, float horizontalProjectileAngle, float verticalProjectileAngle)
         {
             GameObject projectile = Instantiate(prefab, original.position, original.rotation);
             Rigidbody rb = projectile.GetComponent<Rigidbody>();
 
             Assert.IsNotNull(rb, "Rigidbody component is missing on the projectile prefab");
 
-            rb.velocity = direction.normalized * initialSpeed; // Initial velocity
+            var rotation = Quaternion.Euler(-verticalProjectileAngle, horizontalProjectileAngle, 0);
+            basicForwardDirection = rotation * (basicForwardDirection.normalized);
+
+            rb.velocity = basicForwardDirection * initialSpeed; // Initial velocity
             rb.angularVelocity = Random.insideUnitSphere * rotationSpeed; // Random rotation
         }
     }
