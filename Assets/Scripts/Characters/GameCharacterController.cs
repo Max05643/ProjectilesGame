@@ -77,7 +77,7 @@ namespace Projectiles.Characters
         /// </summary>
         public void SetMovement(Vector2 direction)
         {
-            lastMovementDirection = direction.normalized;
+            lastMovementDirection = direction;
         }
 
         void Update()

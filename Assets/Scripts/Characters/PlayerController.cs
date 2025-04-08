@@ -40,7 +40,14 @@ namespace Projectiles.Characters
 
         void Update()
         {
-            gameCharacterController.SetMovement(new Vector2(xAxis, yAxis));
+            var movementVector = new Vector2(xAxis, yAxis);
+
+            if (movementVector.magnitude > 1f)
+            {
+                movementVector.Normalize();
+            }
+
+            gameCharacterController.SetMovement(movementVector);
             gameCharacterController.ChangeAttackPrepareState(attackPrepare);
             gameCharacterController.ChangeDeathState(isDead);
         }
