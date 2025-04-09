@@ -11,10 +11,18 @@ namespace Projectiles.DI
         [SerializeField]
         ProjectileSettings projectileSettings;
 
+        [SerializeField]
+        CharacterSettings characterSettings;
+
         public override void InstallBindings()
         {
             Container.Bind<ProjectileSettings>()
                 .FromInstance(projectileSettings)
+                .AsSingle()
+                .NonLazy();
+
+            Container.Bind<CharacterSettings>()
+                .FromInstance(characterSettings)
                 .AsSingle()
                 .NonLazy();
         }

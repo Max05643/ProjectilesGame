@@ -81,14 +81,23 @@ namespace Projectiles.Characters
 
         void Update()
         {
-            var movementVector = new Vector2(xAxis, yAxis);
-
-            if (movementVector.magnitude > 1f)
+            if (attackPrepared)
             {
-                movementVector.Normalize();
+                gameCharacterController.SetMovement(Vector2.zero);
+            }
+            else
+            {
+                var movementVector = new Vector2(xAxis, yAxis);
+
+                if (movementVector.magnitude > 1f)
+                {
+                    movementVector.Normalize();
+                }
+
+                gameCharacterController.SetMovement(movementVector);
             }
 
-            gameCharacterController.SetMovement(movementVector);
+
 
             // If we are in an attack state, we show the projectile trajectory
             if (attackPrepared)

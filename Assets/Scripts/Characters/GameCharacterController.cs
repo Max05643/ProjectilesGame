@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Projectiles.Physics;
+using Projectiles.Settings;
 using UnityEngine;
 using Zenject;
 
@@ -24,13 +25,14 @@ namespace Projectiles.Characters
         [Inject]
         ProjectilesCreator projectilesCreator;
 
+        [Inject]
+        CharacterSettings characterSettings;
+
         [SerializeField]
         Transform projectileSpawnPoint; // The point where the projectile is spawned
 
-        [SerializeField]
-        float movementSpeed = 5f;
-
-        Vector2 lastMovementDirection = Vector2.zero;
+        Vector2 targetMovementDirection = Vector2.zero;
+        Vector2 currentMovementDirection = Vector2.zero;
 
         float lastHorizontalProjectileAngle = 0f;
         float lastVerticalProjectileAngle = 0f;
@@ -80,22 +82,18 @@ namespace Projectiles.Characters
         /// </summary>
         public void SetMovement(Vector2 direction)
         {
-            lastMovementDirection = direction;
+            targetMovementDirection = direction;
         }
 
         void Update()
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Movement"))
-            {
-                animator.SetFloat("DirectionXAxis", lastMovementDirection.x);
-                animator.SetFloat("DirectionYAxis", lastMovementDirection.y);
-                var targetVelocityObjectSpace = new Vector3(lastMovementDirection.x, 0, lastMovementDirection.y) * movementSpeed;
-                rb.velocity = transform.TransformDirection(targetVelocityObjectSpace);
-            }
-            else
-            {
-                rb.velocity = Vector3.zero;
-            }
+            currentMovementDirection = Vector2.MoveTowards(currentMovementDirection, targetMovementDirection, characterSettings.accelerationNormalized * Time.deltaTime);
+
+
+            var velocityObjectSpace = new Vector3(currentMovementDirection.x, 0, currentMovementDirection.y) * characterSettings.maxMovementSpeed;
+            rb.velocity = transform.TransformDirection(velocityObjectSpace);
+            animator.SetFloat("DirectionXAxis", currentMovementDirection.x);
+            animator.SetFloat("DirectionYAxis", currentMovementDirection.y);
         }
 
         /// <summary>
