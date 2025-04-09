@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Projectiles.Characters;
 using UnityEngine;
 using UnityEngine.UI;
+using TouchControlsKit;
 
 namespace Projectiles.UI
 {
@@ -15,86 +16,50 @@ namespace Projectiles.UI
         [SerializeField]
         PlayerController playerController;
 
-        [SerializeField]
-        Slider horizontalProjectileAngleSlider, verticalProjectileAngleSlider;
 
-        [SerializeField]
-        Toggle attackPrepareToggle;
+        bool aiming = false;
 
-        [SerializeField]
-        Button attackButton;
-
-        [SerializeField]
-        Slider xAxisSlider, yAxisSlider;
-
-        void Start()
+        float MapFromInputToNormalized(float value)
         {
-            attackPrepareToggle.onValueChanged.AddListener(OnAttackPrepareToggleChanged);
-            attackButton.onClick.AddListener(OnAttackButtonClicked);
-            horizontalProjectileAngleSlider.onValueChanged.AddListener(OnHorizontalProjectileAngleSliderChanged);
-            verticalProjectileAngleSlider.onValueChanged.AddListener(OnVerticalProjectileAngleSliderChanged);
-            xAxisSlider.onValueChanged.AddListener(OnXAxisSliderChanged);
-            yAxisSlider.onValueChanged.AddListener(OnYAxisSliderChanged);
-
-
-            Repaint();
+            return (value + 1f) / 2f;
         }
 
-        void Repaint()
+        void Update()
         {
-            attackButton.gameObject.SetActive(playerController.IsAttackPrepared);
-            horizontalProjectileAngleSlider.gameObject.SetActive(playerController.IsAttackPrepared);
-            verticalProjectileAngleSlider.gameObject.SetActive(playerController.IsAttackPrepared);
-            attackPrepareToggle.SetIsOnWithoutNotify(playerController.IsAttackPrepared);
+            float xMovement = MapFromInputToNormalized(TCKInput.GetAxis("MovementJoystick", EAxisType.Horizontal));
+            float yMovement = MapFromInputToNormalized(TCKInput.GetAxis("MovementJoystick", EAxisType.Vertical));
 
-            if (playerController.IsAttackPrepared)
-            {
-                horizontalProjectileAngleSlider.normalizedValue = 0.5f;
-                verticalProjectileAngleSlider.normalizedValue = 0.5f;
-                OnVerticalProjectileAngleSliderChanged(0.5f);
-                OnHorizontalProjectileAngleSliderChanged(0.5f);
-            }
-        }
+            float xAim = MapFromInputToNormalized(TCKInput.GetAxis("AimJoystick", EAxisType.Horizontal));
+            float yAim = MapFromInputToNormalized(TCKInput.GetAxis("AimJoystick", EAxisType.Vertical));
 
-        void OnAttackPrepareToggleChanged(bool isOn)
-        {
-            if (isOn)
+            var aimPhase = TCKInput.GetTouchPhase("AimJoystick");
+
+            playerController.SetXAxisNormalized(xMovement);
+            playerController.SetYAxisNormalized(yMovement);
+
+
+
+
+            if (aimPhase == ETouchPhase.NoTouch)
             {
-                playerController.StartPreparingAttack();
+                if (aiming && playerController.IsAttackPrepared)
+                {
+                    playerController.Fire();
+                    playerController.StopPreparingAttack();
+                }
+                aiming = false;
             }
             else
             {
-                playerController.StopPreparingAttack();
+                aiming = true;
+                TCKInput.SetControllerActive("MovementJoystick", false);
+                playerController.StartPreparingAttack();
+                playerController.SetNormalizedHorizontalProjectileAngle(xAim);
+                playerController.SetNormalizedVerticalProjectileAngle(yAim);
             }
 
-            Repaint();
+
+            TCKInput.SetControllerActive("MovementJoystick", !aiming);
         }
-
-        void OnAttackButtonClicked()
-        {
-            playerController.Fire();
-        }
-
-        void OnHorizontalProjectileAngleSliderChanged(float value)
-        {
-            playerController.SetNormalizedHorizontalProjectileAngle(value);
-        }
-
-        void OnVerticalProjectileAngleSliderChanged(float value)
-        {
-            playerController.SetNormalizedVerticalProjectileAngle(value);
-        }
-
-        void OnXAxisSliderChanged(float value)
-        {
-            playerController.SetXAxisNormalized(value);
-        }
-
-        void OnYAxisSliderChanged(float value)
-        {
-            playerController.SetYAxisNormalized(value);
-        }
-
-
     }
 }
