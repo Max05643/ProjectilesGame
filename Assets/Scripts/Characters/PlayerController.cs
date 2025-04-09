@@ -13,7 +13,7 @@ namespace Projectiles.Characters
     /// <summary>
     /// Transfers player's input to GameCharacterController and handles player's actions
     /// </summary>
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IInitializable
     {
         [SerializeField]
         GameCharacterController gameCharacterController;
@@ -29,6 +29,9 @@ namespace Projectiles.Characters
 
         [Inject]
         ProjectileSettings projectileSettings;
+
+        [Inject]
+        EnemyAICoordinator enemyAICoordinator;
 
         float xAxis = 0f;
         float yAxis = 0f;
@@ -67,6 +70,11 @@ namespace Projectiles.Characters
         public void SetNormalizedVerticalProjectileAngle(float value)
         {
             verticalProjectileAngle = Mathf.Lerp(minVerticalAngle, maxVerticalAngle, value);
+        }
+
+        void IInitializable.Initialize()
+        {
+            enemyAICoordinator.RegisterPlayer(this);
         }
 
         public void Fire()

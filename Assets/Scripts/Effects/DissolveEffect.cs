@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Projectiles.Settings;
 using UnityEngine;
+using Zenject;
 
 namespace Projectiles.Effects
 {
@@ -16,6 +18,8 @@ namespace Projectiles.Effects
 
         Tween currentAnimation;
 
+        [Inject]
+        EffectsSettings effectsSettings;
 
         void OnDestroy()
         {
@@ -42,16 +46,16 @@ namespace Projectiles.Effects
         }
 
         /// <summary>
-        /// Shows/Hides the object gradually, where 1 - object is fully hidden and 0 - object is fully shown
+        /// Hides the object gradually
         /// </summary>
-        public void ChangeEffectGradually(float targetValue, float duration, Action onCompleted = null)
+        public void HideGradually(Action onCompleted = null)
         {
             if (currentAnimation != null)
             {
                 currentAnimation.Kill(true);
             }
 
-            currentAnimation = DOTween.To(() => targetRenderer.material.GetFloat("_Progress"), x => targetRenderer.material.SetFloat("_Progress", x), targetValue, duration).SetEase(Ease.Linear).OnComplete(() => { onCompleted?.Invoke(); });
+            currentAnimation = DOTween.To(() => targetRenderer.material.GetFloat("_Progress"), x => targetRenderer.material.SetFloat("_Progress", x), 1, effectsSettings.timeForItemToDisappear).SetEase(Ease.Linear).OnComplete(() => { onCompleted?.Invoke(); });
         }
     }
 }

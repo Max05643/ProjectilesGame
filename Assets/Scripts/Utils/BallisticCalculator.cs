@@ -88,5 +88,38 @@ namespace Projectiles.Utils
 
             return trajectoryPoints;
         }
+
+        /// <summary>
+        /// Calculates the target vertical angle needed to hit a target at a given distance.
+        /// Returns null if the target is unreachable with the given speed
+        /// </summary>
+        public static float? CalculateProjectileTargetVerticalAngle(Vector3 startPosition, Vector3 basicForwardDirection, float horizontalProjectileAngle, float distanceToTarget, float initialSpeed)
+        {
+            Vector3 gravity = UnityEngine.Physics.gravity;
+            float g = -gravity.y;
+
+
+            if (initialSpeed <= 0.01f || distanceToTarget <= 0.01f)
+                return null;
+
+            Quaternion rotation = Quaternion.Euler(0, horizontalProjectileAngle, 0);
+            Vector3 horizontalDirection = rotation * new Vector3(basicForwardDirection.x, 0, basicForwardDirection.z).normalized;
+
+
+            float v = initialSpeed;
+            float R = distanceToTarget;
+
+            float insideSin = (R * g) / (v * v);
+            if (insideSin < -1f || insideSin > 1f)
+            {
+                return null;
+            }
+
+            float angleRad = 0.5f * Mathf.Asin(insideSin);
+            float angleDeg = Mathf.Rad2Deg * angleRad;
+
+            return angleDeg;
+        }
+
     }
 }

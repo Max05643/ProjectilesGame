@@ -20,3 +20,14 @@ MonoBehaviour:
   characterSettings:
     maxMovementSpeed: 2
     accelerationNormalized: 10
+  effectsSettings:
+    timeForItemToDisappear: 5
+  gameWorldSettings:
+    enemyBoundsMinX: -10
+    enemyBoundsMaxX: 4
+    enemyBoundsMinZ: -3
+    enemyBoundsMaxZ: 7
+    playerBoundsMinX: -10
+    playerBoundsMaxX: 4
+    playerBoundsMinZ: 10
+    playerBoundsMaxZ: 18

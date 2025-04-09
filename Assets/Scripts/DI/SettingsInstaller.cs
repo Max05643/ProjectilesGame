@@ -14,6 +14,12 @@ namespace Projectiles.DI
         [SerializeField]
         CharacterSettings characterSettings;
 
+        [SerializeField]
+        EffectsSettings effectsSettings;
+
+        [SerializeField]
+        GameWorldSettings gameWorldSettings;
+
         public override void InstallBindings()
         {
             Container.Bind<ProjectileSettings>()
@@ -25,6 +31,17 @@ namespace Projectiles.DI
                 .FromInstance(characterSettings)
                 .AsSingle()
                 .NonLazy();
+
+            Container.Bind<EffectsSettings>()
+                .FromInstance(effectsSettings)
+                .AsSingle()
+                .NonLazy();
+
+            Container.Bind<GameWorldSettings>()
+                .FromInstance(gameWorldSettings)
+                .AsSingle()
+                .NonLazy();
+
         }
     }
 }

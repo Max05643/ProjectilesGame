@@ -110,11 +110,20 @@ namespace Projectiles.Characters
         }
 
         /// <summary>
-        /// Sets the character's movement direction
+        /// Sets the character's movement direction in object space (x, z). Direction is not normalized
         /// </summary>
         public void SetMovement(Vector2 direction)
         {
             targetMovementDirection = direction;
+        }
+
+        /// <summary>
+        /// Sets the character's movement direction in world space (x, z). Direction is normalized
+        /// </summary>
+        public void SetMovementWorldSpace(Vector2 direction)
+        {
+            var transformed = transform.InverseTransformDirection(new Vector3(direction.x, 0, direction.y)).normalized;
+            targetMovementDirection = new Vector2(transformed.x, transformed.z);
         }
 
         void Update()

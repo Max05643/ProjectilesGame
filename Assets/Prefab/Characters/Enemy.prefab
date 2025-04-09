@@ -1719,15 +1719,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: -2688723463635561936}
+    - targetCorrespondingSourceObject: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 8490774336200715853}
     - targetCorrespondingSourceObject: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2814349242337561683}
-    - targetCorrespondingSourceObject: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -2688723463635561936}
   m_SourcePrefab: {fileID: 100100000, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
 --- !u!137 &2614401091967026150 stripped
 SkinnedMeshRenderer:
@@ -1780,6 +1780,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
+--- !u!114 &-2688723463635561936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2713458209265985480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c140cb4d54b194d98ad82d699f820a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetRenderer: {fileID: 2614401091967026150}
 --- !u!114 &8490774336200715853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1795,9 +1808,7 @@ MonoBehaviour:
   animator: {fileID: 2664597265585747398}
   rb: {fileID: 2644310120902064532}
   projectileAnimationObject: {fileID: 6331622038188675363}
-  projectilesCreator: {fileID: 0}
   projectileSpawnPoint: {fileID: 4306531506681879540}
-  movementSpeed: 1
 --- !u!114 &2814349242337561683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1810,23 +1821,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bc636cc7e405244b82d40b10805809a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  gameCharacterController: {fileID: 8490774336200715853}
-  dissolveEffect: {fileID: -2688723463635561936}
-  timeToDisappear: 5
---- !u!114 &-2688723463635561936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2713458209265985480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0c140cb4d54b194d98ad82d699f820a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetRenderer: {fileID: 2614401091967026150}
 --- !u!4 &2720013016639888134 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4994864222783348, guid: dbf7a0c9d76b77a40af3104feac0641d,
