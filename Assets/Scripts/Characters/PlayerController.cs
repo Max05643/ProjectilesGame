@@ -30,25 +30,23 @@ namespace Projectiles.Characters
         [Inject]
         ProjectileSettings projectileSettings;
 
-        bool attackPrepared = false;
         float xAxis = 0f;
         float yAxis = 0f;
         float horizontalProjectileAngle = 0;
         float verticalProjectileAngle = 0;
 
-
-        public bool IsAttackPrepared => attackPrepared;
+        public bool CanPrepareToAttackAgain => gameCharacterController.CurrentAnimationState != GameCharacterController.AnimationState.Throwing && !gameCharacterController.WasFireRequested;
+        public bool IsAttackPrepared => gameCharacterController.CurrentAnimationState == GameCharacterController.AnimationState.Preparing;
+        public bool CanMove => gameCharacterController.CurrentAnimationState == GameCharacterController.AnimationState.Movement;
 
         public void StartPreparingAttack()
         {
-            attackPrepared = true;
-            gameCharacterController.ChangeAttackPrepareState(attackPrepared);
+            gameCharacterController.ChangeAttackPrepareState(true);
         }
 
         public void StopPreparingAttack()
         {
-            attackPrepared = false;
-            gameCharacterController.ChangeAttackPrepareState(attackPrepared);
+            gameCharacterController.ChangeAttackPrepareState(false);
         }
 
         public void SetXAxisNormalized(float value)
@@ -73,7 +71,7 @@ namespace Projectiles.Characters
 
         public void Fire()
         {
-            if (attackPrepared)
+            if (IsAttackPrepared)
             {
                 gameCharacterController.ThrowProjectile(horizontalProjectileAngle, verticalProjectileAngle);
             }
@@ -81,7 +79,7 @@ namespace Projectiles.Characters
 
         void Update()
         {
-            if (attackPrepared)
+            if (!CanMove)
             {
                 gameCharacterController.SetMovement(Vector2.zero);
             }
@@ -97,10 +95,8 @@ namespace Projectiles.Characters
                 gameCharacterController.SetMovement(movementVector);
             }
 
-
-
             // If we are in an attack state, we show the projectile trajectory
-            if (attackPrepared)
+            if (IsAttackPrepared)
             {
                 trajectoryDisplayer.Show(
                     BallisticCalculator.CalculateProjectileTrajectory(

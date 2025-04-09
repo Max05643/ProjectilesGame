@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Projectiles.Physics;
 using Projectiles.Settings;
 using UnityEngine;
+using UnityEngine.Events;
 using Zenject;
 
 namespace Projectiles.Characters
@@ -13,6 +15,14 @@ namespace Projectiles.Characters
     /// </summary>
     public class GameCharacterController : MonoBehaviour
     {
+        public enum AnimationState
+        {
+            Throwing,
+            Preparing,
+            Dead,
+            Movement
+        }
+
         [SerializeField]
         Animator animator;
 
@@ -37,6 +47,27 @@ namespace Projectiles.Characters
         float lastHorizontalProjectileAngle = 0f;
         float lastVerticalProjectileAngle = 0f;
 
+        /// <summary>
+        /// Character's animation state. Can be used to sync actions to animations 
+        /// </summary>
+        public AnimationState CurrentAnimationState
+        {
+            get
+            {
+                foreach (var state in (AnimationState[])Enum.GetValues(typeof(AnimationState)))
+                {
+                    if (animator.GetCurrentAnimatorStateInfo(0).IsTag(state.ToString()))
+                    {
+                        return state;
+                    }
+                }
+
+                throw new NotImplementedException($"Unknown animation state in {nameof(GameCharacterController)} in {gameObject.name}");
+            }
+        }
+
+        bool requestedFire = false;
+        public bool WasFireRequested => requestedFire;
 
         public Transform ProjectileSpawnPoint => projectileSpawnPoint;
 
@@ -58,6 +89,7 @@ namespace Projectiles.Characters
                 animator.SetTrigger("AttackDo");
                 lastHorizontalProjectileAngle = horizontalProjectileAngle;
                 lastVerticalProjectileAngle = verticalProjectileAngle;
+                requestedFire = true;
             }
         }
 
@@ -111,6 +143,7 @@ namespace Projectiles.Characters
         public void ProjectileActivated()
         {
             projectileAnimationObject.SetActive(true);
+            requestedFire = false;
         }
     }
 }

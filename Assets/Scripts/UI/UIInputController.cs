@@ -53,14 +53,14 @@ namespace Projectiles.UI
             else
             {
                 aiming = true;
-                TCKInput.SetControllerActive("MovementJoystick", false);
                 playerController.StartPreparingAttack();
                 playerController.SetNormalizedHorizontalProjectileAngle(xAim);
                 playerController.SetNormalizedVerticalProjectileAngle(yAim);
             }
 
 
-            TCKInput.SetControllerActive("MovementJoystick", !aiming);
+            TCKInput.SetControllerActive("AimJoystick", playerController.CanPrepareToAttackAgain);
+            TCKInput.SetControllerActive("MovementJoystick", playerController.CanMove);
         }
     }
 }

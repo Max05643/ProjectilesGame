@@ -18,4 +18,5 @@ MonoBehaviour:
     angularSpeed: 30
     forceStopAfterFirstCollision: 1
   characterSettings:
-    movementSpeed: 2
+    maxMovementSpeed: 2
+    accelerationNormalized: 10
