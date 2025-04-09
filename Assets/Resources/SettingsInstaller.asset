@@ -19,7 +19,7 @@ MonoBehaviour:
     forceStopAfterFirstCollision: 1
   characterSettings:
     maxMovementSpeed: 2
-    accelerationNormalized: 10
+    accelerationNormalized: 5
   effectsSettings:
     timeForItemToDisappear: 5
   gameWorldSettings:

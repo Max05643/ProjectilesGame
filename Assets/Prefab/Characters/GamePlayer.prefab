@@ -1837,9 +1837,7 @@ MonoBehaviour:
   animator: {fileID: 8021433461682431334}
   rb: {fileID: 7594293137729366574}
   projectileAnimationObject: {fileID: 6738809931309837038}
-  projectilesCreator: {fileID: 0}
   projectileSpawnPoint: {fileID: 4252091018947209923}
-  movementSpeed: 5
 --- !u!54 &7594293137729366574
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1862,7 +1860,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -1880,12 +1878,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCharacterController: {fileID: 947029750294469224}
-  horizontalProjectileAngle: 0
-  verticalProjectileAngle: 0
-  xAxis: 0
-  yAxis: 0
-  isDead: 0
-  attackPrepare: 0
+  minHorizontalAngle: -30
+  maxHorizontalAngle: 30
+  minVerticalAngle: 0
+  maxVerticalAngle: 30
 --- !u!4 &7929689150527294372 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4063552230360950, guid: dbf7a0c9d76b77a40af3104feac0641d,
