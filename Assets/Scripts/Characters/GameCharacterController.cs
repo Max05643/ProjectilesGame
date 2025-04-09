@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Projectiles.Physics;
 using UnityEngine;
+using Zenject;
 
 namespace Projectiles.Characters
 {
@@ -20,7 +21,7 @@ namespace Projectiles.Characters
         [SerializeField]
         GameObject projectileAnimationObject;
 
-        [SerializeField]
+        [Inject]
         ProjectilesCreator projectilesCreator;
 
         [SerializeField]

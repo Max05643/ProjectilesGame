@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Projectiles.Interfaces;
 using Projectiles.Settings;
 using UnityEngine;
+using Zenject;
 
 namespace Projectiles.Projectiles
 {
@@ -11,8 +12,12 @@ namespace Projectiles.Projectiles
     /// </summary>
     public class ProjectileController : MonoBehaviour
     {
-        [SerializeField]
-        int damage = 10;
+        public class Factory : PlaceholderFactory<UnityEngine.Object, ProjectileController>
+        {
+        }
+
+        [Inject]
+        ProjectileSettings projectileSettings;
 
         /// <summary>
         /// The time in seconds after which the projectile will be destroyed if it doesn't hit anything
@@ -38,7 +43,7 @@ namespace Projectiles.Projectiles
         {
             gameObject.layer = LayerMask.NameToLayer("CollidedProjectile");
 
-            if (ProjectileSettings.forceStopAfterFirstCollision)
+            if (projectileSettings.forceStopAfterFirstCollision)
             {
                 rg.velocity = Vector3.zero; // Stop the projectile on collision
             }
@@ -56,7 +61,7 @@ namespace Projectiles.Projectiles
 
             if (damageable != null)
             {
-                damageable.ApplyDamage(damage);
+                damageable.ApplyDamage(projectileSettings.damage);
                 Destroy(gameObject);
             }
         }

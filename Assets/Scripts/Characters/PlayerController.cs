@@ -5,6 +5,7 @@ using Projectiles.Settings;
 using Projectiles.UI;
 using Projectiles.Utils;
 using UnityEngine;
+using Zenject;
 
 
 namespace Projectiles.Characters
@@ -17,7 +18,7 @@ namespace Projectiles.Characters
         [SerializeField]
         GameCharacterController gameCharacterController;
 
-        [SerializeField]
+        [Inject]
         TrajectoryDisplayer trajectoryDisplayer;
 
         [SerializeField]
@@ -25,6 +26,9 @@ namespace Projectiles.Characters
 
         [SerializeField]
         float minVerticalAngle = 0f, maxVerticalAngle = 30f;
+
+        [Inject]
+        ProjectileSettings projectileSettings;
 
         bool attackPrepared = false;
         float xAxis = 0f;
@@ -97,7 +101,7 @@ namespace Projectiles.Characters
                         verticalProjectileAngle,
                         true,
                         false,
-                        ProjectileSettings.initialSpeed
+                        projectileSettings.initialSpeed
                     )
                 );
             }

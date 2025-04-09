@@ -4,6 +4,7 @@ using Projectiles.Characters;
 using UnityEngine;
 using UnityEngine.UI;
 using TouchControlsKit;
+using Zenject;
 
 namespace Projectiles.UI
 {
@@ -13,7 +14,7 @@ namespace Projectiles.UI
     /// </summary>
     public class UIInputController : MonoBehaviour
     {
-        [SerializeField]
+        [Inject]
         PlayerController playerController;
 
 
@@ -40,7 +41,7 @@ namespace Projectiles.UI
 
 
 
-            if (aimPhase == ETouchPhase.NoTouch)
+            if (aimPhase == ETouchPhase.NoTouch || aimPhase == ETouchPhase.Ended)
             {
                 if (aiming && playerController.IsAttackPrepared)
                 {
