@@ -1,10 +1,7 @@
 {
-    "name": "Projectiles",
+    "name": "TCKRuntime",
     "rootNamespace": "",
-    "references": [
-        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
-        "GUID:d1d1ca94c9663df45bd03d2a424295df"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
