@@ -32,6 +32,18 @@ namespace Projectiles.Characters
         }
 
         /// <summary>
+        /// Returns the velocity of the player in world space or null if player is not registered
+        /// </summary>
+        public Vector3? GetPlayersWorldVelocity()
+        {
+            if (playerController == null)
+            {
+                return null;
+            }
+            return playerController.GetComponent<Rigidbody>().velocity;
+        }
+
+        /// <summary>
         /// Returns the position of the player in world space or null if player is not registered
         /// </summary>
         public Vector3? GetPlayersWorldPosition()

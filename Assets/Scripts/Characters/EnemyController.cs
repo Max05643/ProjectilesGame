@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Projectiles.Effects;
 using Projectiles.Interfaces;
 using Projectiles.Settings;
+using Projectiles.Utils;
 using UnityEngine;
 using Zenject;
 
@@ -29,6 +30,8 @@ namespace Projectiles.Characters
             public bool IsDead => health <= 0;
             public EnemyController controller;
             public GameWorldSettings gameWorldSettings;
+            public CharacterSettings characterSettings;
+            public ProjectileSettings projectileSettings;
         }
 
 
@@ -102,14 +105,21 @@ namespace Projectiles.Characters
 
         class WanderState : EnemyAIState
         {
-            public WanderState(EnemyAIContext context) : base(context) { }
+            public WanderState(EnemyAIContext context) : base(context)
+            {
+                duration = UnityEngine.Random.Range(3f, 10f);
+            }
 
             Vector2 nextTargetPosition = Vector2.zero;
             float timeSinceLastPositionChange = 0f;
+            float timeOnThisState = 0f;
+            float duration;
 
 
             public override void Tick(float deltaTime)
             {
+
+                timeOnThisState += deltaTime;
                 timeSinceLastPositionChange += deltaTime;
 
                 Vector2 currentPosition = new Vector2(context.gameObject.transform.position.x, context.gameObject.transform.position.z);
@@ -136,22 +146,133 @@ namespace Projectiles.Characters
 
             public override bool CanTransition()
             {
-                return context.IsDead;
+                var playerPos = context.enemyAICoordinator.GetPlayersWorldPosition();
+                return context.IsDead || (timeOnThisState > duration && playerPos.HasValue && Vector3.Distance(context.gameObject.transform.position, playerPos.Value) <= context.characterSettings.AIAttackRange);
             }
 
             public override EnemyAIState TransitionToNextState()
             {
-                return new DeathState(context);
+                var playerPos = context.enemyAICoordinator.GetPlayersWorldPosition();
+
+                if (context.IsDead)
+                {
+                    return new DeathState(context);
+                }
+                else if ((timeOnThisState > duration && playerPos.HasValue && Vector3.Distance(context.gameObject.transform.position, playerPos.Value) <= context.characterSettings.AIAttackRange))
+                {
+                    return new AttackState(context);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Cannot transition from WanderState");
+                }
             }
         }
 
+
+        class AttackState : EnemyAIState
+        {
+            public AttackState(EnemyAIContext context) : base(context) { }
+
+            bool startedAttack = false;
+            bool thrownProjectile = false;
+            bool endedAttack = false;
+
+            public override void Tick(float deltaTime)
+            {
+                if (!startedAttack)
+                {
+                    startedAttack = true;
+                    context.gameCharacterController.ChangeAttackPrepareState(true);
+                    context.gameCharacterController.SetMovement(Vector2.zero);
+                }
+                else if (!thrownProjectile)
+                {
+                    const float playerPreemptingTime = 1f;
+
+                    var playerPos = context.enemyAICoordinator.GetPlayersWorldPosition();
+                    var playerVelocity = context.enemyAICoordinator.GetPlayersWorldVelocity();
+
+                    if (!playerPos.HasValue || !playerVelocity.HasValue)
+                    {
+                        Debug.LogError("Player position or velocity is not available");
+                        endedAttack = true;
+                        return;
+                    }
+
+                    thrownProjectile = true;
+
+                    var basicForwardDirection = context.gameObject.transform.forward;
+                    var firePosition = context.gameCharacterController.ProjectileSpawnPoint.position;
+
+                    var targetPosition = playerPos.Value + playerVelocity.Value * playerPreemptingTime;
+                    var vectorToPlayer = targetPosition - firePosition;
+
+                    var distance = vectorToPlayer.magnitude;
+
+                    var horizontalProjectileAngle = Vector3.SignedAngle(basicForwardDirection, vectorToPlayer, Vector3.up);
+
+                    var verticalProjectileAngle = BallisticCalculator.CalculateProjectileTargetVerticalAngle(
+                        firePosition,
+                        basicForwardDirection,
+                        distance,
+                        context.projectileSettings.initialSpeed
+                    );
+
+
+                    if (verticalProjectileAngle.HasValue)
+                    {
+                        context.gameCharacterController.ThrowProjectile(
+                            horizontalProjectileAngle,
+                            verticalProjectileAngle.Value
+                        );
+                    }
+                    else
+                    {
+                        endedAttack = true;
+                    }
+
+                    context.gameCharacterController.ChangeAttackPrepareState(false);
+
+                    context.gameCharacterController.onProjectileThrown.AddListener(OnAnimationEnd);
+                }
+            }
+
+            void OnAnimationEnd()
+            {
+                endedAttack = true;
+            }
+
+            public override bool CanTransition()
+            {
+                return context.IsDead || endedAttack;
+            }
+
+            public override EnemyAIState TransitionToNextState()
+            {
+                context.gameCharacterController.onProjectileThrown.RemoveListener(OnAnimationEnd);
+
+                if (context.IsDead)
+                {
+                    return new DeathState(context);
+                }
+                else if (endedAttack)
+                {
+                    return new WanderState(context);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Cannot transition from AttackState");
+                }
+            }
+        }
 
 
         EnemyAIContext enemyAIContext;
         EnemyAIState currentState;
 
         [Inject]
-        void Inject(EnemyAICoordinator enemyAICoordinator, GameWorldSettings gameWorldSettings)
+        void Inject(EnemyAICoordinator enemyAICoordinator, GameWorldSettings gameWorldSettings, CharacterSettings characterSettings, ProjectileSettings projectileSettings)
         {
             enemyAIContext = new EnemyAIContext()
             {
@@ -160,7 +281,9 @@ namespace Projectiles.Characters
                 enemyAICoordinator = enemyAICoordinator,
                 gameObject = gameObject,
                 gameWorldSettings = gameWorldSettings,
-                controller = this
+                controller = this,
+                characterSettings = characterSettings,
+                projectileSettings = projectileSettings
             };
 
             enemyAICoordinator.RegisterEnemy(this);

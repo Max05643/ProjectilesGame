@@ -93,7 +93,7 @@ namespace Projectiles.Utils
         /// Calculates the target vertical angle needed to hit a target at a given distance.
         /// Returns null if the target is unreachable with the given speed
         /// </summary>
-        public static float? CalculateProjectileTargetVerticalAngle(Vector3 startPosition, Vector3 basicForwardDirection, float horizontalProjectileAngle, float distanceToTarget, float initialSpeed)
+        public static float? CalculateProjectileTargetVerticalAngle(Vector3 startPosition, Vector3 basicForwardDirection, float distanceToTarget, float initialSpeed)
         {
             Vector3 gravity = UnityEngine.Physics.gravity;
             float g = -gravity.y;
@@ -101,10 +101,6 @@ namespace Projectiles.Utils
 
             if (initialSpeed <= 0.01f || distanceToTarget <= 0.01f)
                 return null;
-
-            Quaternion rotation = Quaternion.Euler(0, horizontalProjectileAngle, 0);
-            Vector3 horizontalDirection = rotation * new Vector3(basicForwardDirection.x, 0, basicForwardDirection.z).normalized;
-
 
             float v = initialSpeed;
             float R = distanceToTarget;

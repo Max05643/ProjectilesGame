@@ -10,6 +10,7 @@ namespace Projectiles.Settings
     {
         public float maxMovementSpeed = 5f;
         public float accelerationNormalized = 0.5f;
+        public float AIAttackRange = 10f;
 
     }
 }

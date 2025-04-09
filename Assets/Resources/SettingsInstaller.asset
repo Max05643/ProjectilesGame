@@ -20,6 +20,7 @@ MonoBehaviour:
   characterSettings:
     maxMovementSpeed: 2
     accelerationNormalized: 5
+    AIAttackRange: 15
   effectsSettings:
     timeForItemToDisappear: 5
   gameWorldSettings:

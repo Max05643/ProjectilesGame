@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Projectiles.Interfaces;
 using Projectiles.Settings;
 using Projectiles.UI;
 using Projectiles.Utils;
@@ -13,7 +14,7 @@ namespace Projectiles.Characters
     /// <summary>
     /// Transfers player's input to GameCharacterController and handles player's actions
     /// </summary>
-    public class PlayerController : MonoBehaviour, IInitializable
+    public class PlayerController : MonoBehaviour, IInitializable, IDamageAble
     {
         [SerializeField]
         GameCharacterController gameCharacterController;
@@ -122,6 +123,11 @@ namespace Projectiles.Characters
             {
                 trajectoryDisplayer.Hide();
             }
+        }
+
+        void IDamageAble.ApplyDamage(int damage)
+        {
+            Debug.Log("Player took damage: " + damage);
         }
     }
 }

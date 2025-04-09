@@ -41,6 +41,9 @@ namespace Projectiles.Characters
         [SerializeField]
         Transform projectileSpawnPoint; // The point where the projectile is spawned
 
+        [SerializeField]
+        bool isPlayer = true;
+
         Vector2 targetMovementDirection = Vector2.zero;
         Vector2 currentMovementDirection = Vector2.zero;
 
@@ -70,6 +73,11 @@ namespace Projectiles.Characters
         public bool WasFireRequested => requestedFire;
 
         public Transform ProjectileSpawnPoint => projectileSpawnPoint;
+
+        /// <summary>
+        /// Event that is called when the projectile is thrown. Can be used to sync actions to animations
+        /// </summary>
+        public UnityEvent onProjectileThrown = new UnityEvent();
 
         /// <summary>
         /// Plays the projectile throwing animation. Should be called only if attackPrepare is set
@@ -142,8 +150,19 @@ namespace Projectiles.Characters
         /// </summary>
         public void ProjectileThrown()
         {
-            projectilesCreator.FirePlayersProjectile(projectileAnimationObject.transform, transform.forward, lastHorizontalProjectileAngle, lastVerticalProjectileAngle);
+            if (isPlayer)
+            {
+                projectilesCreator.FirePlayersProjectile(projectileAnimationObject.transform, transform.forward, lastHorizontalProjectileAngle, lastVerticalProjectileAngle);
+            }
+            else
+            {
+                projectilesCreator.FireEnemiesProjectile(projectileAnimationObject.transform, transform.forward, lastHorizontalProjectileAngle, lastVerticalProjectileAngle);
+            }
+
+
             projectileAnimationObject.SetActive(false);
+
+            onProjectileThrown.Invoke();
         }
 
         /// <summary>

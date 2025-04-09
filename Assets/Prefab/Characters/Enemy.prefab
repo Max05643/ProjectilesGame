@@ -1809,6 +1809,7 @@ MonoBehaviour:
   rb: {fileID: 2644310120902064532}
   projectileAnimationObject: {fileID: 6331622038188675363}
   projectileSpawnPoint: {fileID: 4306531506681879540}
+  isPlayer: 0
 --- !u!114 &2814349242337561683
 MonoBehaviour:
   m_ObjectHideFlags: 0

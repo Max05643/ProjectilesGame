@@ -19,11 +19,9 @@ namespace Projectiles.Projectiles
         [Inject]
         ProjectileSettings projectileSettings;
 
-        /// <summary>
-        /// The time in seconds after which the projectile will be destroyed if it doesn't hit anything
-        /// </summary>
-        [SerializeField]
-        float lifeTimeAfterGroundCollision = 5f;
+        [Inject]
+        EffectsSettings effectsSettings;
+
 
         [SerializeField]
         Rigidbody rg;
@@ -33,7 +31,7 @@ namespace Projectiles.Projectiles
 
         void Update()
         {
-            if (timeOfCollision != null && Time.timeSinceLevelLoad - timeOfCollision > lifeTimeAfterGroundCollision)
+            if (timeOfCollision != null && Time.timeSinceLevelLoad - timeOfCollision > effectsSettings.timeForItemToDisappear)
             {
                 Destroy(gameObject);
             }
