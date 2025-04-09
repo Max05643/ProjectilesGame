@@ -188,7 +188,7 @@ namespace Projectiles.Characters
                 }
                 else if (!thrownProjectile)
                 {
-                    const float playerPreemptingTime = 1f;
+                    const float playerPreemptingTime = 1.5f;
 
                     var playerPos = context.enemyAICoordinator.GetPlayersWorldPosition();
                     var playerVelocity = context.enemyAICoordinator.GetPlayersWorldVelocity();
