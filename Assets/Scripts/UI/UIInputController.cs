@@ -83,19 +83,36 @@ namespace Projectiles.UI
 
         void Update()
         {
+            bool acceptMovementInput = playerController.CanMove;
+            bool acceptAimInput = playerController.CanPrepareToAttackAgain;
+
+
             float xMovement = MapFromInputToNormalized(TCKInput.GetAxis("MovementJoystick", EAxisType.Horizontal));
             float yMovement = MapFromInputToNormalized(TCKInput.GetAxis("MovementJoystick", EAxisType.Vertical));
 
-            float xAim = MapFromInputToNormalized(TCKInput.GetAxis("AimJoystick", EAxisType.Horizontal));
-            float yAim = MapFromInputToNormalized(TCKInput.GetAxis("AimJoystick", EAxisType.Vertical));
-
-            var aimPhase = TCKInput.GetTouchPhase("AimJoystick");
+            if (!acceptMovementInput)
+            {
+                xMovement = 0.5f;
+                yMovement = 0.5f;
+            }
 
             playerController.SetXAxisNormalized(xMovement);
             playerController.SetYAxisNormalized(yMovement);
 
 
 
+            float xAim = MapFromInputToNormalized(TCKInput.GetAxis("AimJoystick", EAxisType.Horizontal));
+            float yAim = MapFromInputToNormalized(TCKInput.GetAxis("AimJoystick", EAxisType.Vertical));
+
+            var aimPhase = TCKInput.GetTouchPhase("AimJoystick");
+
+
+            if (!acceptAimInput)
+            {
+                aimPhase = ETouchPhase.NoTouch;
+                xAim = 0.5f;
+                yAim = 0.5f;
+            }
 
             if (aimPhase == ETouchPhase.NoTouch || aimPhase == ETouchPhase.Ended)
             {
@@ -113,10 +130,6 @@ namespace Projectiles.UI
                 playerController.SetNormalizedHorizontalProjectileAngle(xAim);
                 playerController.SetNormalizedVerticalProjectileAngle(yAim);
             }
-
-
-            TCKInput.SetControllerActive("AimJoystick", playerController.CanPrepareToAttackAgain);
-            TCKInput.SetControllerActive("MovementJoystick", playerController.CanMove);
         }
     }
 }
