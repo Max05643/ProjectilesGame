@@ -12,5 +12,8 @@ namespace Projectiles.Settings
         public float accelerationNormalized = 0.5f;
         public float AIAttackRange = 10f;
 
+        public int maxPlayerHealth = 1000;
+        public int maxEnemyHealth = 100;
+
     }
 }

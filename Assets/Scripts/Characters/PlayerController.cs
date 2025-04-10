@@ -14,7 +14,7 @@ namespace Projectiles.Characters
     /// <summary>
     /// Transfers player's input to GameCharacterController and handles player's actions
     /// </summary>
-    public class PlayerController : MonoBehaviour, IInitializable, IDamageAble
+    public class PlayerController : MonoBehaviour, IInitializable
     {
         [SerializeField]
         GameCharacterController gameCharacterController;
@@ -32,6 +32,9 @@ namespace Projectiles.Characters
         ProjectileSettings projectileSettings;
 
         [Inject]
+        CharacterSettings characterSettings;
+
+        [Inject]
         EnemiesCoordinator enemyAICoordinator;
 
         [Inject]
@@ -42,7 +45,7 @@ namespace Projectiles.Characters
         float horizontalProjectileAngle = 0;
         float verticalProjectileAngle = 0;
 
-        public bool CanPrepareToAttackAgain => gameCharacterController.CurrentAnimationState != GameCharacterController.AnimationState.Throwing && !gameCharacterController.WasFireRequested;
+        public bool CanPrepareToAttackAgain => gameCharacterController.CurrentAnimationState != GameCharacterController.AnimationState.Hit && gameCharacterController.CurrentAnimationState != GameCharacterController.AnimationState.Throwing && !gameCharacterController.WasFireRequested;
         public bool IsAttackPrepared => gameCharacterController.CurrentAnimationState == GameCharacterController.AnimationState.Preparing;
         public bool CanMove => gameCharacterController.CurrentAnimationState == GameCharacterController.AnimationState.Movement;
 
@@ -79,6 +82,7 @@ namespace Projectiles.Characters
         void IInitializable.Initialize()
         {
             enemyAICoordinator.RegisterPlayer(this);
+            gameCharacterController.SetHealthAndMaxHealth(characterSettings.maxPlayerHealth, characterSettings.maxPlayerHealth);
         }
 
         public void Fire()
@@ -158,11 +162,6 @@ namespace Projectiles.Characters
             {
                 trajectoryDisplayer.Hide();
             }
-        }
-
-        void IDamageAble.ApplyDamage(int damage)
-        {
-            Debug.Log("Player took damage: " + damage);
         }
     }
 }

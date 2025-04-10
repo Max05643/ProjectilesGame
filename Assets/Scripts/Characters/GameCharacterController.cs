@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Projectiles.Interfaces;
 using Projectiles.Physics;
 using Projectiles.Settings;
 using UnityEngine;
@@ -13,14 +14,15 @@ namespace Projectiles.Characters
     /// <summary>
     /// Used to control game characters (player and enemies)
     /// </summary>
-    public class GameCharacterController : MonoBehaviour
+    public class GameCharacterController : MonoBehaviour, IDamageAble
     {
         public enum AnimationState
         {
             Throwing,
             Preparing,
             Dead,
-            Movement
+            Movement,
+            Hit
         }
 
         [SerializeField]
@@ -50,8 +52,26 @@ namespace Projectiles.Characters
         float lastHorizontalProjectileAngle = 0f;
         float lastVerticalProjectileAngle = 0f;
 
+        public UnityEvent onHealthChanged = new UnityEvent();
+        public UnityEvent onDeath = new UnityEvent();
         /// <summary>
-        /// Character's animation state. Can be used to sync actions to animations 
+        /// Event that is called when the projectile is thrown
+        /// </summary>
+        public UnityEvent onProjectileThrown = new UnityEvent();
+        /// <summary>
+        /// Event that is called when the character is hit by projectile
+        /// </summary>
+        public UnityEvent onGotHit = new UnityEvent();
+        [SerializeField]
+        int health = 100;
+        [SerializeField]
+        int maxHealth = 100;
+        public bool IsDead => health <= 0;
+        public float HealthNormalized => (float)health / maxHealth;
+
+
+        /// <summary>
+        /// Character's animation state
         /// </summary>
         public AnimationState CurrentAnimationState
         {
@@ -74,10 +94,22 @@ namespace Projectiles.Characters
 
         public Transform ProjectileSpawnPoint => projectileSpawnPoint;
 
+
+
+
         /// <summary>
-        /// Event that is called when the projectile is thrown. Can be used to sync actions to animations
+        /// Sets character's health and max health
         /// </summary>
-        public UnityEvent onProjectileThrown = new UnityEvent();
+        public void SetHealthAndMaxHealth(int health, int maxHealth)
+        {
+            this.health = health;
+            this.maxHealth = maxHealth;
+
+            if (health > 0)
+            {
+                ChangeDeathState(false);
+            }
+        }
 
         /// <summary>
         /// Plays the projectile throwing animation. Should be called only if attackPrepare is set
@@ -104,7 +136,7 @@ namespace Projectiles.Characters
         /// <summary>
         /// Changes character's death status
         /// </summary>
-        public void ChangeDeathState(bool isDead)
+        void ChangeDeathState(bool isDead)
         {
             animator.SetBool("IsDead", isDead);
         }
@@ -136,11 +168,18 @@ namespace Projectiles.Characters
 
         void Update()
         {
-            currentMovementDirection = Vector2.MoveTowards(currentMovementDirection, targetMovementDirection, characterSettings.accelerationNormalized * Time.deltaTime);
-
+            if (CurrentAnimationState == AnimationState.Movement)
+            {
+                currentMovementDirection = Vector2.MoveTowards(currentMovementDirection, targetMovementDirection, characterSettings.accelerationNormalized * Time.deltaTime);
+            }
+            else
+            {
+                currentMovementDirection = Vector2.MoveTowards(currentMovementDirection, Vector2.zero, characterSettings.accelerationNormalized * Time.deltaTime);
+            }
 
             var velocityObjectSpace = new Vector3(currentMovementDirection.x, 0, currentMovementDirection.y) * characterSettings.maxMovementSpeed;
             rb.velocity = transform.TransformDirection(velocityObjectSpace);
+
             animator.SetFloat("DirectionXAxis", currentMovementDirection.x);
             animator.SetFloat("DirectionYAxis", currentMovementDirection.y);
         }
@@ -172,6 +211,38 @@ namespace Projectiles.Characters
         {
             projectileAnimationObject.SetActive(true);
             requestedFire = false;
+        }
+
+
+        /// <summary>
+        /// Plays the hit animation. Should be called when character is hit by a projectile
+        /// </summary>
+        void AddHitAnimation()
+        {
+            animator.SetTrigger("Hit");
+        }
+
+        /// <summary>
+        /// Called when projectile hits character
+        /// </summary>
+        void IDamageAble.ApplyDamage(int damage)
+        {
+            health -= damage;
+            health = Mathf.Clamp(health, 0, maxHealth);
+            onHealthChanged.Invoke();
+
+            if (IsDead)
+            {
+                ChangeDeathState(true);
+                onDeath.Invoke();
+            }
+            else
+            {
+                animator.ResetTrigger("AttackDo");
+                requestedFire = false;
+                AddHitAnimation();
+                onGotHit.Invoke();
+            }
         }
     }
 }

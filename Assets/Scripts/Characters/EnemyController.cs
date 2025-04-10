@@ -14,7 +14,7 @@ namespace Projectiles.Characters
     /// <summary>
     /// Transfers enemy's input to GameCharacterController and handles enemy's actions
     /// </summary>
-    public class EnemyController : MonoBehaviour, IDamageAble
+    public class EnemyController : MonoBehaviour
     {
         public class Factory : PlaceholderFactory<UnityEngine.Object, EnemyController>
         {
@@ -30,8 +30,6 @@ namespace Projectiles.Characters
             public GameObject gameObject;
             public DissolveEffect dissolveEffect;
             public EnemiesCoordinator enemyAICoordinator;
-            public int health = 100;
-            public bool IsDead => health <= 0;
             public EnemyController controller;
             public GameWorldSettings gameWorldSettings;
             public CharacterSettings characterSettings;
@@ -62,6 +60,11 @@ namespace Projectiles.Characters
             /// Returns the next state to transition to. Should be called only if CanTransition() is true
             /// </summary>
             public abstract EnemyAIState TransitionToNextState();
+
+            /// <summary>
+            /// Cleans up the state. Should be called when the state is no longer needed.
+            /// </summary>
+            public virtual void Cleanup() { }
         }
 
 
@@ -82,7 +85,6 @@ namespace Projectiles.Characters
 
                 calledDeathAnimation = true;
 
-                context.gameCharacterController.ChangeDeathState(true);
                 context.gameCharacterController.SetMovement(Vector2.zero);
                 context.dissolveEffect.HideGradually(() =>
                 {
@@ -151,14 +153,14 @@ namespace Projectiles.Characters
             public override bool CanTransition()
             {
                 var playerPos = context.enemyAICoordinator.GetPlayersWorldPosition();
-                return context.IsDead || (timeOnThisState > duration && playerPos.HasValue && Vector3.Distance(context.gameObject.transform.position, playerPos.Value) <= context.characterSettings.AIAttackRange);
+                return context.gameCharacterController.IsDead || (timeOnThisState > duration && playerPos.HasValue && Vector3.Distance(context.gameObject.transform.position, playerPos.Value) <= context.characterSettings.AIAttackRange);
             }
 
             public override EnemyAIState TransitionToNextState()
             {
                 var playerPos = context.enemyAICoordinator.GetPlayersWorldPosition();
 
-                if (context.IsDead)
+                if (context.gameCharacterController.IsDead)
                 {
                     return new DeathState(context);
                 }
@@ -189,8 +191,9 @@ namespace Projectiles.Characters
                     startedAttack = true;
                     context.gameCharacterController.ChangeAttackPrepareState(true);
                     context.gameCharacterController.SetMovement(Vector2.zero);
+                    context.gameCharacterController.onGotHit.AddListener(OnAnimationEnd);
                 }
-                else if (!thrownProjectile)
+                else if (!thrownProjectile && !endedAttack)
                 {
                     const float playerPreemptingTime = 1.5f;
 
@@ -249,14 +252,12 @@ namespace Projectiles.Characters
 
             public override bool CanTransition()
             {
-                return context.IsDead || endedAttack;
+                return context.gameCharacterController.IsDead || endedAttack;
             }
 
             public override EnemyAIState TransitionToNextState()
             {
-                context.gameCharacterController.onProjectileThrown.RemoveListener(OnAnimationEnd);
-
-                if (context.IsDead)
+                if (context.gameCharacterController.IsDead)
                 {
                     return new DeathState(context);
                 }
@@ -268,6 +269,12 @@ namespace Projectiles.Characters
                 {
                     throw new InvalidOperationException("Cannot transition from AttackState");
                 }
+            }
+
+            public override void Cleanup()
+            {
+                context.gameCharacterController.onProjectileThrown.RemoveListener(OnAnimationEnd);
+                context.gameCharacterController.onGotHit.RemoveListener(OnAnimationEnd);
             }
         }
 
@@ -288,8 +295,6 @@ namespace Projectiles.Characters
                 characterSettings = characterSettings,
                 projectileSettings = projectileSettings
             };
-
-            currentState = new WanderState(enemyAIContext);
         }
 
         /// <summary>
@@ -300,13 +305,10 @@ namespace Projectiles.Characters
             enemyAIContext.dissolveEffect.HideImmediate();
             enemyAIContext.dissolveEffect.ShowGradually();
             enemyAIContext.enemyAICoordinator = enemiesCoordinator;
-        }
-
-
-        void IDamageAble.ApplyDamage(int damage)
-        {
-            enemyAIContext.health -= damage;
-            enemyAIContext.health = Mathf.Clamp(enemyAIContext.health, 0, 100);
+            currentState?.Cleanup();
+            currentState = new WanderState(enemyAIContext);
+            enemiesCoordinator.RegisterEnemy(this);
+            enemyAIContext.gameCharacterController.SetHealthAndMaxHealth(enemyAIContext.characterSettings.maxEnemyHealth, enemyAIContext.characterSettings.maxEnemyHealth);
         }
 
 
@@ -314,7 +316,9 @@ namespace Projectiles.Characters
         {
             if (currentState.CanTransition())
             {
+                var oldState = currentState;
                 currentState = currentState.TransitionToNextState();
+                oldState.Cleanup();
             }
 
             currentState.Tick(Time.deltaTime);

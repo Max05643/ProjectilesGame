@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SettingsInstaller
   m_EditorClassIdentifier: 
   projectileSettings:
-    damage: 100
+    damage: 50
     initialSpeed: 20
     angularSpeed: 30
     forceStopAfterFirstCollision: 1
@@ -21,6 +21,8 @@ MonoBehaviour:
     maxMovementSpeed: 2
     accelerationNormalized: 5
     AIAttackRange: 15
+    maxPlayerHealth: 1000
+    maxEnemyHealth: 100
   effectsSettings:
     timeForItemToDisappear: 2
     timeForItemToAppear: 2
@@ -34,5 +36,5 @@ MonoBehaviour:
     playerBoundsMinZ: 10
     playerBoundsMaxZ: 20
   enemySettings:
-    maxEnemies: 5
-    spawnIntervalInSeconds: 5
+    maxEnemies: 3
+    spawnIntervalInSeconds: 8
