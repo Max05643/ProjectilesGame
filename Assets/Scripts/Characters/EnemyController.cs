@@ -297,6 +297,8 @@ namespace Projectiles.Characters
         /// </summary>
         public void InitializeOnCreation(EnemiesCoordinator enemiesCoordinator)
         {
+            enemyAIContext.dissolveEffect.HideImmediate();
+            enemyAIContext.dissolveEffect.ShowGradually();
             enemyAIContext.enemyAICoordinator = enemiesCoordinator;
         }
 

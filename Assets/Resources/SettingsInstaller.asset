@@ -22,7 +22,8 @@ MonoBehaviour:
     accelerationNormalized: 5
     AIAttackRange: 15
   effectsSettings:
-    timeForItemToDisappear: 5
+    timeForItemToDisappear: 2
+    timeForItemToAppear: 2
   gameWorldSettings:
     enemyBoundsMinX: -10
     enemyBoundsMaxX: 4
@@ -32,3 +33,6 @@ MonoBehaviour:
     playerBoundsMaxX: 5
     playerBoundsMinZ: 10
     playerBoundsMaxZ: 20
+  enemySettings:
+    maxEnemies: 5
+    spawnIntervalInSeconds: 5

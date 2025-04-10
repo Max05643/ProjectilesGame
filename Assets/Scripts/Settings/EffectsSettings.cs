@@ -15,6 +15,11 @@ namespace Projectiles.Settings
         /// <summary>
         /// Time in seconds for the destroyed object to disappear
         /// </summary>
-        public float timeForItemToDisappear = 5f;
+        public float timeForItemToDisappear = 2f;
+
+        /// <summary>
+        /// Time in seconds for the new object to appear
+        /// </summary>
+        public float timeForItemToAppear = 2f;
     }
 }
