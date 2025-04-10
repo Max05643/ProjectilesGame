@@ -1823,6 +1823,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5381382043351726590}
+    - targetCorrespondingSourceObject: {fileID: 1953271650171834, guid: dbf7a0c9d76b77a40af3104feac0641d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3095444981683135489}
   m_SourcePrefab: {fileID: 100100000, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
 --- !u!1 &7927309506669639528 stripped
 GameObject:
@@ -1906,6 +1910,7 @@ MonoBehaviour:
   maxHorizontalAngle: 30
   minVerticalAngle: 0
   maxVerticalAngle: 30
+  playerCameraController: {fileID: 3095444981683135489}
   onHealthChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2024,6 +2029,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3095444981683135489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7927309506669639528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98e46ede7ecada43a1f89713c95f5da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraSpeed: 5
+  lowPos: {fileID: 0}
+  highPos: {fileID: 0}
+  cameraTransform: {fileID: 0}
 --- !u!4 &7929689150527294372 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4063552230360950, guid: dbf7a0c9d76b77a40af3104feac0641d,

@@ -41,6 +41,9 @@ namespace Projectiles.Characters
         [Inject]
         GameWorldSettings gameWorldSettings;
 
+        [SerializeField]
+        PlayerCameraController playerCameraController;
+
         float xAxis = 0f;
         float yAxis = 0f;
         float horizontalProjectileAngle = 0;
@@ -62,14 +65,28 @@ namespace Projectiles.Characters
             gameCharacterController.onDeath.AddListener(() => onDeath.Invoke());
         }
 
+        void ChangeAttackPrepareState(bool state)
+        {
+            gameCharacterController.ChangeAttackPrepareState(state);
+
+            if (state)
+            {
+                playerCameraController.MoveToHighPos();
+            }
+            else
+            {
+                playerCameraController.MoveToLowPos();
+            }
+        }
+
         public void StartPreparingAttack()
         {
-            gameCharacterController.ChangeAttackPrepareState(true);
+            ChangeAttackPrepareState(true);
         }
 
         public void StopPreparingAttack()
         {
-            gameCharacterController.ChangeAttackPrepareState(false);
+            ChangeAttackPrepareState(false);
         }
 
         public void SetXAxisNormalized(float value)
@@ -95,7 +112,7 @@ namespace Projectiles.Characters
         public void Revive()
         {
             gameCharacterController.SetHealthAndMaxHealth(characterSettings.maxPlayerHealth, characterSettings.maxPlayerHealth);
-            gameCharacterController.ChangeAttackPrepareState(false);
+            ChangeAttackPrepareState(false);
             gameCharacterController.SetMovement(Vector2.zero);
         }
 
