@@ -105,10 +105,9 @@ namespace Projectiles.Characters
             this.health = health;
             this.maxHealth = maxHealth;
 
-            if (health > 0)
-            {
-                ChangeDeathState(false);
-            }
+            ChangeDeathState(health <= 0);
+            animator.ResetTrigger("Hit");
+            onHealthChanged.Invoke();
         }
 
         /// <summary>

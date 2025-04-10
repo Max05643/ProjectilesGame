@@ -21,7 +21,7 @@ MonoBehaviour:
     maxMovementSpeed: 3
     accelerationNormalized: 5
     AIAttackRange: 15
-    maxPlayerHealth: 1000
+    maxPlayerHealth: 250
     maxEnemyHealth: 100
   effectsSettings:
     timeForItemToDisappear: 2

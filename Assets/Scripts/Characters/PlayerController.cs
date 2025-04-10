@@ -6,6 +6,7 @@ using Projectiles.Settings;
 using Projectiles.UI;
 using Projectiles.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 using Zenject;
 
 
@@ -48,6 +49,18 @@ namespace Projectiles.Characters
         public bool CanPrepareToAttackAgain => gameCharacterController.CurrentAnimationState != GameCharacterController.AnimationState.Hit && gameCharacterController.CurrentAnimationState != GameCharacterController.AnimationState.Throwing && !gameCharacterController.WasFireRequested;
         public bool IsAttackPrepared => gameCharacterController.CurrentAnimationState == GameCharacterController.AnimationState.Preparing;
         public bool CanMove => gameCharacterController.CurrentAnimationState == GameCharacterController.AnimationState.Movement;
+        public float HealthNormalized => gameCharacterController.HealthNormalized;
+
+
+        public UnityEvent onHealthChanged = new UnityEvent();
+        public UnityEvent onDeath = new UnityEvent();
+
+
+        void Start()
+        {
+            gameCharacterController.onHealthChanged.AddListener(() => onHealthChanged.Invoke());
+            gameCharacterController.onDeath.AddListener(() => onDeath.Invoke());
+        }
 
         public void StartPreparingAttack()
         {
@@ -77,6 +90,13 @@ namespace Projectiles.Characters
         public void SetNormalizedVerticalProjectileAngle(float value)
         {
             verticalProjectileAngle = Mathf.Lerp(minVerticalAngle, maxVerticalAngle, value);
+        }
+
+        public void Revive()
+        {
+            gameCharacterController.SetHealthAndMaxHealth(characterSettings.maxPlayerHealth, characterSettings.maxPlayerHealth);
+            gameCharacterController.ChangeAttackPrepareState(false);
+            gameCharacterController.SetMovement(Vector2.zero);
         }
 
         void IInitializable.Initialize()

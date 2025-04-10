@@ -17,8 +17,41 @@ namespace Projectiles.UI
         [Inject]
         PlayerController playerController;
 
+        [SerializeField]
+        HealthBarController healthBarController;
+
+        [SerializeField]
+        Button reviveButton;
+
+        [SerializeField]
+        GameObject deathScreen;
 
         bool aiming = false;
+
+        void Start()
+        {
+            playerController.onDeath.AddListener(OnDeath);
+            playerController.onHealthChanged.AddListener(OnHealthChanged);
+            healthBarController.SetNormalizedHealth(playerController.HealthNormalized, false);
+            reviveButton.onClick.AddListener(() =>
+            {
+                playerController.Revive();
+            });
+            deathScreen.SetActive(false);
+        }
+
+        void OnHealthChanged()
+        {
+            float healthNormalized = playerController.HealthNormalized;
+            healthBarController.SetNormalizedHealth(playerController.HealthNormalized, true);
+
+            deathScreen.SetActive(healthNormalized <= 0);
+        }
+
+        void OnDeath()
+        {
+            healthBarController.SetNormalizedHealth(0, true);
+        }
 
         float MapFromInputToNormalized(float value)
         {
