@@ -124,7 +124,6 @@ namespace Projectiles.Characters
 
             public override void Tick(float deltaTime)
             {
-
                 timeOnThisState += deltaTime;
                 timeSinceLastPositionChange += deltaTime;
 
@@ -181,7 +180,6 @@ namespace Projectiles.Characters
             public AttackState(EnemyAIContext context) : base(context) { }
 
             bool startedAttack = false;
-            bool thrownProjectile = false;
             bool endedAttack = false;
 
             public override void Tick(float deltaTime)
@@ -193,8 +191,9 @@ namespace Projectiles.Characters
                     context.gameCharacterController.SetMovement(Vector2.zero);
                     context.gameCharacterController.onGotHit.AddListener(OnAnimationEnd);
                 }
-                else if (!thrownProjectile && !endedAttack)
+                else if (!endedAttack)
                 {
+                    endedAttack = true;
                     const float playerPreemptingTime = 1.5f;
 
                     var playerPos = context.enemyAICoordinator.GetPlayersWorldPosition();
@@ -203,11 +202,9 @@ namespace Projectiles.Characters
                     if (!playerPos.HasValue || !playerVelocity.HasValue)
                     {
                         Debug.LogError("Player position or velocity is not available");
-                        endedAttack = true;
+                        context.gameCharacterController.ChangeAttackPrepareState(false);
                         return;
                     }
-
-                    thrownProjectile = true;
 
                     var basicForwardDirection = context.gameObject.transform.forward;
                     var firePosition = context.gameCharacterController.ProjectileSpawnPoint.position;
@@ -234,14 +231,8 @@ namespace Projectiles.Characters
                             verticalProjectileAngle.Value
                         );
                     }
-                    else
-                    {
-                        endedAttack = true;
-                    }
 
                     context.gameCharacterController.ChangeAttackPrepareState(false);
-
-                    context.gameCharacterController.onProjectileThrown.AddListener(OnAnimationEnd);
                 }
             }
 
@@ -273,7 +264,6 @@ namespace Projectiles.Characters
 
             public override void Cleanup()
             {
-                context.gameCharacterController.onProjectileThrown.RemoveListener(OnAnimationEnd);
                 context.gameCharacterController.onGotHit.RemoveListener(OnAnimationEnd);
             }
         }
