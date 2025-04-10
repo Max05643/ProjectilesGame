@@ -29,7 +29,7 @@ MonoBehaviour:
   gameWorldSettings:
     enemyBoundsMinX: -10
     enemyBoundsMaxX: 4
-    enemyBoundsMinZ: -3
+    enemyBoundsMinZ: -2.5
     enemyBoundsMaxZ: 7
     playerBoundsMinX: -5
     playerBoundsMaxX: 5
