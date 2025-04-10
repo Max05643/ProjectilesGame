@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilesCreator: {fileID: 7858611772165386171, guid: 2d261f96489cbf5458858ff5e67978b4,
     type: 3}
+  musicSource: {fileID: 6112443563486871302, guid: 723469fbb86a32c45a1b140d4d5e0d02,
+    type: 3}

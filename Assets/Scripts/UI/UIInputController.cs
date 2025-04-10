@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TouchControlsKit;
 using Zenject;
+using Projectiles.Music;
 
 namespace Projectiles.UI
 {
@@ -26,7 +27,21 @@ namespace Projectiles.UI
         [SerializeField]
         GameObject deathScreen;
 
+        [SerializeField]
+        Button muteButton, unMuteButton;
+
+        [Inject]
+        MusicController musicController;
+
         bool aiming = false;
+
+        void MuteStatusChange()
+        {
+            musicController.Muted = !musicController.Muted;
+
+            muteButton.gameObject.SetActive(!musicController.Muted);
+            unMuteButton.gameObject.SetActive(musicController.Muted);
+        }
 
         void Start()
         {
@@ -38,6 +53,14 @@ namespace Projectiles.UI
                 playerController.Revive();
             });
             deathScreen.SetActive(false);
+            muteButton.onClick.AddListener(() =>
+            {
+                MuteStatusChange();
+            });
+            unMuteButton.onClick.AddListener(() =>
+            {
+                MuteStatusChange();
+            });
         }
 
         void OnHealthChanged()
@@ -79,9 +102,9 @@ namespace Projectiles.UI
                 if (aiming && playerController.IsAttackPrepared)
                 {
                     playerController.Fire();
-                    playerController.StopPreparingAttack();
                 }
                 aiming = false;
+                playerController.StopPreparingAttack();
             }
             else
             {

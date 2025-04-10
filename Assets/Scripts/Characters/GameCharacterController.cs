@@ -209,9 +209,8 @@ namespace Projectiles.Characters
                 projectilesCreator.FireEnemiesProjectile(projectileAnimationObject.transform, transform.forward, lastHorizontalProjectileAngle, lastVerticalProjectileAngle);
             }
 
-
+            requestedFire = false;
             projectileAnimationObject.SetActive(false);
-
             onProjectileThrown.Invoke();
         }
 
@@ -221,7 +220,6 @@ namespace Projectiles.Characters
         public void ProjectileActivated()
         {
             projectileAnimationObject.SetActive(true);
-            requestedFire = false;
         }
 
 
