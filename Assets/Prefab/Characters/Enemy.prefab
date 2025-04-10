@@ -1696,7 +1696,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: bc69fc6ad5b6c7645aa0c00ecda79767, type: 2}
+      objectReference: {fileID: 2100000, guid: 0de058d3249347244bc279642f0da6e4, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1890493464866982, guid: dbf7a0c9d76b77a40af3104feac0641d, type: 3}
@@ -1810,6 +1810,9 @@ MonoBehaviour:
   projectileAnimationObject: {fileID: 6331622038188675363}
   projectileSpawnPoint: {fileID: 4306531506681879540}
   isPlayer: 0
+  onProjectileThrown:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2814349242337561683
 MonoBehaviour:
   m_ObjectHideFlags: 0

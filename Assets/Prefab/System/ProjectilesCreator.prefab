@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6536510054001289536
+--- !u!1 &7858611772165386171
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7438132026212203727}
-  - component: {fileID: 6215396397994310582}
+  - component: {fileID: 2098805792811722136}
+  - component: {fileID: 3721202215085641546}
   m_Layer: 0
-  m_Name: SystemInstaller
+  m_Name: ProjectilesCreator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7438132026212203727
+--- !u!4 &2098805792811722136
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6536510054001289536}
+  m_GameObject: {fileID: 7858611772165386171}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.36221692, y: 1.9833559, z: 16.644552}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6215396397994310582
+--- !u!114 &3721202215085641546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6536510054001289536}
+  m_GameObject: {fileID: 7858611772165386171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aefedd75ce21e834c9c01eae7b368fc2, type: 3}
+  m_Script: {fileID: 11500000, guid: 2997b15a6d6aecc49884d7d1144edc28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilesCreator: {fileID: 7858611772165386171, guid: 2d261f96489cbf5458858ff5e67978b4,
+  projectilePrefabPlayer: {fileID: 5972417817578458676, guid: df2169f18f2c88e47875cbe8931a028d,
+    type: 3}
+  projectilePrefabEnemy: {fileID: 5972417817578458676, guid: ddf96f63bfe711d4298cbec7580b3e3f,
     type: 3}

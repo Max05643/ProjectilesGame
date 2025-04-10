@@ -1,18 +1,66 @@
 using System.Collections;
 using System.Collections.Generic;
+using Projectiles.Settings;
 using UnityEngine;
+using Zenject;
 
 namespace Projectiles.Characters
 {
     /// <summary>
-    /// Used to coordinate enemy AI
+    /// Used to coordinate enemy AI and spawn enemies
     /// </summary>
-    public class EnemyAICoordinator : MonoBehaviour
+    public class EnemiesCoordinator : MonoBehaviour
     {
         PlayerController playerController;
 
         List<EnemyController> enemies = new List<EnemyController>();
 
+        [Inject]
+        EnemyController.Factory enemyFactory;
+
+        [Inject]
+        EnemySettings enemySettings;
+
+        [Inject]
+        GameWorldSettings gameWorldSettings;
+
+        [SerializeField]
+        GameObject enemyPrefab;
+
+        [SerializeField]
+        Quaternion enemyOrientation = Quaternion.identity;
+
+
+        void Start()
+        {
+            StartCoroutine(EnemySpawnLoop());
+        }
+
+        /// <summary>
+        /// Spawns new enemies
+        /// </summary>
+        IEnumerator EnemySpawnLoop()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(enemySettings.spawnIntervalInSeconds);
+
+                if (enemies.Count >= enemySettings.maxEnemies)
+                {
+                    continue;
+                }
+
+                var enemy = enemyFactory.Create(enemyPrefab);
+                var enemyPos = new Vector3(
+                    Random.Range(gameWorldSettings.enemyBoundsMinX, gameWorldSettings.enemyBoundsMaxX),
+                    0,
+                    Random.Range(gameWorldSettings.enemyBoundsMinZ, gameWorldSettings.enemyBoundsMaxZ)
+                );
+                enemy.transform.SetPositionAndRotation(enemyPos, enemyOrientation);
+                RegisterEnemy(enemy);
+                enemy.InitializeOnCreation(this);
+            }
+        }
 
         /// <summary>
         /// Returna a collection of enemies positions near the given position in world space

@@ -32,7 +32,7 @@ namespace Projectiles.Characters
         ProjectileSettings projectileSettings;
 
         [Inject]
-        EnemyAICoordinator enemyAICoordinator;
+        EnemiesCoordinator enemyAICoordinator;
 
         [Inject]
         GameWorldSettings gameWorldSettings;

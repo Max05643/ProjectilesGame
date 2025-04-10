@@ -20,6 +20,9 @@ namespace Projectiles.DI
         [SerializeField]
         GameWorldSettings gameWorldSettings;
 
+        [SerializeField]
+        EnemySettings enemySettings;
+
         public override void InstallBindings()
         {
             Container.Bind<ProjectileSettings>()
@@ -39,6 +42,11 @@ namespace Projectiles.DI
 
             Container.Bind<GameWorldSettings>()
                 .FromInstance(gameWorldSettings)
+                .AsSingle()
+                .NonLazy();
+
+            Container.Bind<EnemySettings>()
+                .FromInstance(enemySettings)
                 .AsSingle()
                 .NonLazy();
 

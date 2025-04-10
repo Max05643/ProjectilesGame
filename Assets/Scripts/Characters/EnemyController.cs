@@ -16,6 +16,10 @@ namespace Projectiles.Characters
     /// </summary>
     public class EnemyController : MonoBehaviour, IDamageAble
     {
+        public class Factory : PlaceholderFactory<UnityEngine.Object, EnemyController>
+        {
+        }
+
 
         /// <summary>
         /// Information needed for enemy AI to make decisionss and act
@@ -25,7 +29,7 @@ namespace Projectiles.Characters
             public GameCharacterController gameCharacterController;
             public GameObject gameObject;
             public DissolveEffect dissolveEffect;
-            public EnemyAICoordinator enemyAICoordinator;
+            public EnemiesCoordinator enemyAICoordinator;
             public int health = 100;
             public bool IsDead => health <= 0;
             public EnemyController controller;
@@ -272,13 +276,12 @@ namespace Projectiles.Characters
         EnemyAIState currentState;
 
         [Inject]
-        void Inject(EnemyAICoordinator enemyAICoordinator, GameWorldSettings gameWorldSettings, CharacterSettings characterSettings, ProjectileSettings projectileSettings)
+        void Inject(GameWorldSettings gameWorldSettings, CharacterSettings characterSettings, ProjectileSettings projectileSettings)
         {
             enemyAIContext = new EnemyAIContext()
             {
                 gameCharacterController = GetComponent<GameCharacterController>(),
                 dissolveEffect = GetComponent<DissolveEffect>(),
-                enemyAICoordinator = enemyAICoordinator,
                 gameObject = gameObject,
                 gameWorldSettings = gameWorldSettings,
                 controller = this,
@@ -286,10 +289,17 @@ namespace Projectiles.Characters
                 projectileSettings = projectileSettings
             };
 
-            enemyAICoordinator.RegisterEnemy(this);
-
             currentState = new WanderState(enemyAIContext);
         }
+
+        /// <summary>
+        /// Should be called when this enemy is activated (again)
+        /// </summary>
+        public void InitializeOnCreation(EnemiesCoordinator enemiesCoordinator)
+        {
+            enemyAIContext.enemyAICoordinator = enemiesCoordinator;
+        }
+
 
         void IDamageAble.ApplyDamage(int damage)
         {
