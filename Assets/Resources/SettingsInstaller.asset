@@ -28,7 +28,7 @@ MonoBehaviour:
     enemyBoundsMaxX: 4
     enemyBoundsMinZ: -3
     enemyBoundsMaxZ: 7
-    playerBoundsMinX: -10
-    playerBoundsMaxX: 4
+    playerBoundsMinX: -5
+    playerBoundsMaxX: 5
     playerBoundsMinZ: 10
-    playerBoundsMaxZ: 18
+    playerBoundsMaxZ: 20

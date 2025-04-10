@@ -34,6 +34,9 @@ namespace Projectiles.Characters
         [Inject]
         EnemyAICoordinator enemyAICoordinator;
 
+        [Inject]
+        GameWorldSettings gameWorldSettings;
+
         float xAxis = 0f;
         float yAxis = 0f;
         float horizontalProjectileAngle = 0;
@@ -86,6 +89,38 @@ namespace Projectiles.Characters
             }
         }
 
+        /// <summary>
+        /// Restricts player from going out of the world bounds
+        /// </summary>
+        Vector2 RestrictMovementsInWorldBounds(Vector2 movementVectorObjectSpace)
+        {
+            var playerPosWorldSpace = gameCharacterController.transform.position;
+            var vectorWorldSpace = gameCharacterController.transform.TransformDirection(new Vector3(movementVectorObjectSpace.x, 0, movementVectorObjectSpace.y));
+
+            if (playerPosWorldSpace.x <= gameWorldSettings.playerBoundsMinX && vectorWorldSpace.x < 0f)
+            {
+                vectorWorldSpace.x = 0f;
+            }
+            else if (playerPosWorldSpace.x >= gameWorldSettings.playerBoundsMaxX && vectorWorldSpace.x > 0f)
+            {
+                vectorWorldSpace.x = 0f;
+            }
+
+            if (playerPosWorldSpace.z <= gameWorldSettings.playerBoundsMinZ && vectorWorldSpace.z < 0f)
+            {
+                vectorWorldSpace.z = 0f;
+            }
+            else if (playerPosWorldSpace.z >= gameWorldSettings.playerBoundsMaxZ && vectorWorldSpace.z > 0f)
+            {
+                vectorWorldSpace.z = 0f;
+            }
+
+
+
+            var restrictedVectorObjectSpace = gameCharacterController.transform.InverseTransformDirection(vectorWorldSpace);
+            return new Vector2(restrictedVectorObjectSpace.x, restrictedVectorObjectSpace.z);
+        }
+
         void Update()
         {
             if (!CanMove)
@@ -101,7 +136,7 @@ namespace Projectiles.Characters
                     movementVector.Normalize();
                 }
 
-                gameCharacterController.SetMovement(movementVector);
+                gameCharacterController.SetMovement(RestrictMovementsInWorldBounds(movementVector));
             }
 
             // If we are in an attack state, we show the projectile trajectory
