@@ -56,6 +56,7 @@ namespace Projectiles.Characters
                     0,
                     Random.Range(gameWorldSettings.enemyBoundsMinZ, gameWorldSettings.enemyBoundsMaxZ)
                 );
+                enemy.transform.SetParent(transform);
                 enemy.transform.SetPositionAndRotation(enemyPos, enemyOrientation);
                 enemy.InitializeOnCreation(this);
             }

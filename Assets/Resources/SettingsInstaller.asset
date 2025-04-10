@@ -18,7 +18,7 @@ MonoBehaviour:
     angularSpeed: 30
     forceStopAfterFirstCollision: 1
   characterSettings:
-    maxMovementSpeed: 2
+    maxMovementSpeed: 3
     accelerationNormalized: 5
     AIAttackRange: 15
     maxPlayerHealth: 1000

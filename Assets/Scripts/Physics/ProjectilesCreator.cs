@@ -43,7 +43,7 @@ namespace Projectiles.Physics
         void FireProjectile(GameObject prefab, Transform original, Vector3 basicForwardDirection, float horizontalProjectileAngle, float verticalProjectileAngle)
         {
             GameObject projectile = projectileFactory.Create(prefab).gameObject;
-            projectile.transform.SetParent(transform);
+            projectile.transform.SetParent(null);
             projectile.transform.SetPositionAndRotation(original.position, original.rotation);
 
             Rigidbody rb = projectile.GetComponent<Rigidbody>();
