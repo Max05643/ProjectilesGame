@@ -29,6 +29,9 @@ namespace Projectiles.Characters
         Animator animator;
 
         [SerializeField]
+        CharacterSoundController soundController;
+
+        [SerializeField]
         Rigidbody rb;
 
         [SerializeField]
@@ -183,6 +186,15 @@ namespace Projectiles.Characters
             animator.SetFloat("DirectionYAxis", currentMovementDirection.y);
         }
 
+
+        /// <summary>
+        /// Called from the animation on the frame where projectile is almost thrown
+        /// </summary>
+        public void ProjectileWillBeThrown()
+        {
+            soundController.PlayThrowSound();
+        }
+
         /// <summary>
         /// Called from the animation on the frame where projectile should be converted to a physical object
         /// </summary>
@@ -234,12 +246,14 @@ namespace Projectiles.Characters
             {
                 ChangeDeathState(true);
                 onDeath.Invoke();
+                soundController.PlayDeadSound();
             }
             else
             {
                 animator.ResetTrigger("AttackDo");
                 requestedFire = false;
                 AddHitAnimation();
+                soundController.PlayHitSound();
                 onGotHit.Invoke();
             }
         }
